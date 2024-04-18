@@ -61,7 +61,6 @@ const coordinates = {
   // chickenScale:
 };
 
-
 /*const platforms = {
   platform1: { x: 0, y: 460, width: 125, height: 30 }, //Lower row 1
   platform2: { x: 125, y: 505, width: 125, height: 30 }, //Lower row 2
