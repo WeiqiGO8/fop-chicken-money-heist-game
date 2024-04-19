@@ -99,7 +99,7 @@ function coordinatePointer() {
 function jumpMovement() {
   chickenY += velocity;
 
-  if (chickenY < platforms - size / 2) {
+  /*if (chickenY < platforms - size / 2) {
     // in the air
     velocity += g;
   } else {
@@ -110,14 +110,14 @@ function jumpMovement() {
   if (chickenY >= platforms - size / 2) {
     // on the ground
     velocity = -jump;
-  }
+  }*/
 }
 
 function movement() {
   chickenX += speed;
   if (keyIsPressed) {
     if (keyCode === arrowKey.spacebarKey || arrowKey.upArrow) {
-      jumpMovement();
+      //jumpMovement();
       /*chickenY += velocity;
       velocity += acceleration;
       gravity += jumpHeight;*/
