@@ -14,6 +14,9 @@ let ground;
 let velocity = 0;
 const size = 20;
 
+//Imports
+//import { platform, platformArray } from "./level-1.js";
+
 // load images - variable = loadImage("file-path");
 // preload images --> loadimage - variable = loadImage("file-path");
 // use img --> image(variable, x, y, width, height);
@@ -60,11 +63,6 @@ const coordinates = {
   // chickenY:,
   // chickenScale:
 };
-
-/*const platforms = {
-  platform1: { x: 0, y: 460, width: 125, height: 30 }, //Lower row 1
-  platform2: { x: 125, y: 505, width: 125, height: 30 }, //Lower row 2
-}*/
 
 function setup() {
   let canvas = createCanvas(800, 800);
@@ -118,9 +116,6 @@ function movement() {
   if (keyIsPressed) {
     if (keyCode === arrowKey.spacebarKey || arrowKey.upArrow) {
       //jumpMovement();
-      /*chickenY += velocity;
-      velocity += acceleration;
-      gravity += jumpHeight;*/
     }
     if (keyCode === arrowKey.leftArrow) {
       speed = -5;

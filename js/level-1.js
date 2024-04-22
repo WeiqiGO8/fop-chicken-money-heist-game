@@ -9,7 +9,31 @@ class platform {
     this.height = height;
   }
 }
-//Row 1
+
+let platformArray = [
+  new platform(0, 460, 125, 30), //Row 1, from the left
+  new platform(125, 505, 130, 30),
+  new platform(258, 477, 125, 25),
+  new platform(384, 505, 157, 34),
+  new platform(540, 435, 160, 30),
+  new platform(0, 344, 179, 34), //Row 2
+  new platform(179, 402, 125, 27),
+  new platform(319, 379, 132, 31),
+  new platform(451, 439, 65, 22),
+  new platform(540, 433, 160, 34),
+  new platform(515, 334, 185, 31), //Row 3
+  new platform(0, 206, 57, 38), //Row 4
+  new platform(117, 214, 134, 36),
+  new platform(215, 280, 74, 28),
+  new platform(352, 303, 57, 22),
+  new platform(515, 255, 59, 22),
+  new platform(644, 252, 56, 23),
+];
+
+//Export platform class + array
+export { platform, platformArray };
+
+/*//Row 1
 let platform1 = new platform(0, 460, 125, 30);
 let platform2 = new platform(125, 505, 130, 30);
 let platform3 = new platform(258, 477, 125, 25);
@@ -29,4 +53,4 @@ let platform13 = new platform(117, 214, 134, 36);
 let platform14 = new platform(215, 280, 74, 28);
 let platform15 = new platform(352, 303, 57, 22);
 let platform16 = new platform(515, 255, 59, 22);
-let platform17 = new platform(644, 252, 56, 23);
+let platform17 = new platform(644, 252, 56, 23); */
