@@ -18,7 +18,7 @@ const size = 20;
 //import { platform, platformArray } from "./level-1.js";
 
 // load images - variable = loadImage("file-path");
-// preload images --> loadimage - variable = loadImage("file-path");
+// preload images --> loadImage - variable = loadImage("file-path");
 // use img --> image(variable, x, y, width, height);
 function preload() {
   firstLevelBackground = loadImage("img/level-1.png");
@@ -154,6 +154,8 @@ function levelTwo(x, y) {
     coordinates.backgroundW,
     coordinates.backgroundH
   );
+  chicken(chickenX, chickenY);
+  movement();
 }
 
 function draw() {
