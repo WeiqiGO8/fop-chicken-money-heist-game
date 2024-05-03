@@ -1,7 +1,10 @@
+import { Platform, platformArray } from "../js/level-1.js";
+import { PlatformTwo, platformTwoArray } from "../js/level-2.js";
+
 // global variable for the background:
 let firstLevelBackground;
 let secondLevelBackground;
-let state = "levelOne";
+let state = "levelTwo";
 
 //Main character variables
 let mainCharacter;
@@ -25,20 +28,9 @@ function preload() {
   secondLevelBackground = loadImage("img/level-2.png");
   mainCharacter = loadImage("img/chickenPixel.png");
 }
+window.preload = preload;
 
 // objects
-const backgroundPlacement = {
-  backgroundX: 100,
-  backgroundY: 100,
-  backgroundW: 700,
-  backgroundH: 600,
-};
-
-const characterPlacement = {
-  chickenX: 110,
-  chickenY: 520,
-};
-
 const arrowKey = {
   upArrow: 38,
   rightArrow: 39,
@@ -55,13 +47,6 @@ const coordinates = {
   backgroundY: 0,
   backgroundW: 700,
   backgroundH: 600,
-
-  // borders xywh
-
-  //character xy, scale
-  // chickenX:,
-  // chickenY:,
-  // chickenScale:
 };
 
 function setup() {
@@ -70,6 +55,7 @@ function setup() {
   background(255, 255, 255);
   frameRate(30);
 }
+window.setup = setup;
 
 function chicken(chickenX, chickenY) {
   //mainCharacter = document.getElementById("imageElement");
@@ -132,6 +118,7 @@ function keyReleased() {
     speed = 0;
   }
 }
+window.keyReleased = keyReleased;
 
 function levelOne() {
   //image(variable, x, y, width, height);
@@ -171,3 +158,4 @@ function draw() {
   }
   coordinatePointer(); // makes the exact coordinates of the canvas visible with mouse
 }
+window.draw = draw;
