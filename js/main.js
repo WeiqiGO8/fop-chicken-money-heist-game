@@ -1,5 +1,6 @@
 import { Platform, platformArray } from "../js/level-1.js";
 import { PlatformTwo, platformTwoArray } from "../js/level-2.js";
+import { mapTiles } from "../js/tiles.js";
 
 // global variable for the background:
 let firstLevelBackground;
@@ -17,15 +18,9 @@ let ground;
 let velocity = 0;
 const size = 20;
 
-//Imports
-//import { platform, platformArray } from "./level-1.js";
-
-// load images - variable = loadImage("file-path");
-// preload images --> loadImage - variable = loadImage("file-path");
-// use img --> image(variable, x, y, width, height);
 function preload() {
-  firstLevelBackground = loadImage("img/level-1.png");
-  secondLevelBackground = loadImage("img/level-2.png");
+  firstLevelBackground = loadImage("img/level-01.png");
+  secondLevelBackground = loadImage("img/level-02.png");
   mainCharacter = loadImage("img/chickenPixel.png");
 }
 window.preload = preload;
@@ -43,14 +38,14 @@ const arrowKey = {
 
 const coordinates = {
   //canvas xywh
-  backgroundX: 0,
-  backgroundY: 0,
-  backgroundW: 700,
-  backgroundH: 600,
+  x: 0,
+  y: 0,
+  width: 1366,
+  height: 768,
 };
 
 function setup() {
-  let canvas = createCanvas(800, 800);
+  let canvas = createCanvas(1366, 768);
   canvas.parent("canvas-holder");
   background(255, 255, 255);
   frameRate(30);
@@ -124,25 +119,27 @@ function levelOne() {
   //image(variable, x, y, width, height);
   image(
     firstLevelBackground,
-    coordinates.backgroundX,
-    coordinates.backgroundY,
-    coordinates.backgroundW,
-    coordinates.backgroundH
+    coordinates.x,
+    coordinates.y,
+    coordinates.width,
+    coordinates.height
   );
   chicken(chickenX, chickenY);
   movement();
+  mapTiles();
 }
 
 function levelTwo(x, y) {
   image(
     secondLevelBackground,
-    coordinates.backgroundX,
-    coordinates.backgroundY,
-    coordinates.backgroundW,
-    coordinates.backgroundH
+    coordinates.x,
+    coordinates.y,
+    coordinates.width,
+    coordinates.height
   );
   chicken(chickenX, chickenY);
   movement();
+  mapTiles();
 }
 
 function draw() {
