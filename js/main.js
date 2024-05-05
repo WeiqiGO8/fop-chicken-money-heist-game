@@ -1,3 +1,6 @@
+//Imports
+//import { platform, platformArray } from "./level-1.js";
+
 // global variable for the background:
 let firstLevelBackground;
 let secondLevelBackground;
@@ -8,14 +11,17 @@ let mainCharacter;
 let chickenY = 420;
 let chickenX = 30;
 let speed = 0;
-const g = 1; // Gravity
-const jump = 20; // Jump power
-let ground;
-let velocity = 0;
-const size = 20;
+const chickenWidth = 50;
+const chickenHeight = 60;
 
-//Imports
-//import { platform, platformArray } from "./level-1.js";
+//Gravity
+let jump = false; //Is character jumping?
+let direction = 1; // Force of gravity in Y direction
+let velocity = 2;
+let jumpPower = 10;
+let fallingSpeed = 2;
+let maxHeight = 50;
+let jumpCounter = 0;
 
 // load images - variable = loadImage("file-path");
 // preload images --> loadimage - variable = loadImage("file-path");
@@ -64,6 +70,14 @@ const coordinates = {
   // chickenScale:
 };
 
+/*const background = new Sprite({
+  position: {
+    x: 0,
+    y: 0,
+  },
+  imageSrc: "./img/level-1.png",
+});*/
+
 function setup() {
   let canvas = createCanvas(800, 800);
   canvas.parent("canvas-holder");
@@ -72,8 +86,7 @@ function setup() {
 }
 
 function chicken(chickenX, chickenY) {
-  //mainCharacter = document.getElementById("imageElement");
-  image(mainCharacter, chickenX, chickenY);
+  image(mainCharacter, chickenX, chickenY, chickenWidth, chickenHeight);
 }
 
 // function to make it easier to work with the game - make up for the loss of p5canvas pluggin
@@ -92,31 +105,52 @@ function coordinatePointer() {
   line(0, mouseY, width, mouseY);
 }
 
-//https://editor.p5js.org/tnishida/sketches/Wv_-BBBaA - 2024-04-16
-// Jump movement was modified from this code
-function jumpMovement() {
-  chickenY += velocity;
+// Storing the platforms
+// Will be moved to level-1 file later, problem with import.
 
-  /*if (chickenY < platforms - size / 2) {
-    // in the air
-    velocity += g;
-  } else {
-    velocity = 0;
-    chickenY = platforms - size / 2;
+class platform {
+  constructor(x, y, width, height) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
   }
-
-  if (chickenY >= platforms - size / 2) {
-    // on the ground
-    velocity = -jump;
-  }*/
 }
+
+let platformArray = [
+  new platform(0, 460, 125, 30), //Row 1, from the left
+  new platform(125, 505, 130, 30),
+  new platform(258, 477, 125, 25),
+  new platform(384, 505, 157, 34),
+  new platform(540, 435, 160, 30),
+  new platform(0, 344, 179, 34), //Row 2
+  new platform(179, 402, 125, 27),
+  new platform(319, 379, 132, 31),
+  new platform(451, 439, 65, 22),
+  new platform(540, 433, 160, 34),
+  new platform(515, 334, 185, 31), //Row 3
+  new platform(0, 206, 57, 38), //Row 4
+  new platform(117, 214, 134, 36),
+  new platform(215, 280, 74, 28),
+  new platform(352, 303, 57, 22),
+  new platform(515, 255, 59, 22),
+  new platform(644, 252, 56, 23),
+];
+
+class Ground {
+  constructor(x, y, width, height) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+  }
+}
+
+let groundArray = [];
 
 function movement() {
   chickenX += speed;
   if (keyIsPressed) {
-    if (keyCode === arrowKey.spacebarKey || arrowKey.upArrow) {
-      //jumpMovement();
-    }
     if (keyCode === arrowKey.leftArrow) {
       speed = -5;
     } else if (keyCode === arrowKey.rightArrow) {
@@ -127,9 +161,77 @@ function movement() {
   }
 }
 
+function keyPressed() {
+  if (keyIsPressed) {
+    if (keyCode === arrowKey.leftArrow) {
+      speed = -5;
+    } else if (keyCode === arrowKey.rightArrow) {
+      speed = 5;
+    } else {
+      speed = 0;
+    }
+
+    if (keyCode === arrowKey.spacebarKey || keyCode === arrowKey.upArrow) {
+      jump = true;
+    }
+  }
+}
+
+//Reset
 function keyReleased() {
   if (keyCode === arrowKey.leftArrow || keyCode === arrowKey.rightArrow) {
     speed = 0;
+  }
+  if (keyCode === arrowKey.spacebarKey || keyCode === arrowKey.upArrow) {
+    jump = false;
+  }
+}
+
+//https://chat.openai.com/share/28fefe10-0739-4420-8a4c-10edff61a6a8 - 28-04-2024
+//
+
+function gravity() {
+  chickenX += speed;
+  let onPlatform = false; // Flag to check if the chicken is on a platform
+  let platformY = chickenY + chickenHeight;
+
+  // Check collision with each platform
+  for (let i = 0; i < platformArray.length; i++) {
+    let platform = platformArray[i];
+    if (
+      chickenX + chickenWidth > platform.x &&
+      chickenX < platform.x + platform.width &&
+      chickenY + chickenHeight >= platform.y &&
+      chickenY < platform.y + platform.height
+    ) {
+      // Chicken is colliding with a platform
+      onPlatform = true;
+      platformY = platform.y;
+      break; // Exit the loop since we don't need to check other platforms
+    }
+  }
+
+  if (onPlatform) {
+    if (jump && jumpCounter < jumpPower) {
+      velocity = -jumpPower;
+      jumpCounter++;
+    } else {
+      chickenY = platformY - chickenHeight;
+      jumpCounter = 0; // reset jumpCounter
+      velocity = 0; // reset velocity
+    }
+  } else {
+    chickenY += direction * velocity;
+    if (jump) {
+      if (jumpCounter >= jumpPower) {
+        velocity = fallingSpeed;
+      } else {
+        velocity = -jumpPower;
+        jumpCounter++;
+      }
+    } else {
+      velocity = fallingSpeed;
+    }
   }
 }
 
@@ -142,8 +244,9 @@ function levelOne() {
     coordinates.backgroundW,
     coordinates.backgroundH
   );
-  chicken(chickenX, chickenY);
+  chicken(chickenX, chickenY, chickenWidth, chickenHeight);
   movement();
+  gravity();
 }
 
 function levelTwo(x, y) {

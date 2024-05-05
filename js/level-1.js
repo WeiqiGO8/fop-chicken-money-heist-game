@@ -33,6 +33,11 @@ let platformArray = [
 //Export platform class + array
 export { platform, platformArray };
 
+
+
+
+
+
 /*//Row 1
 let platform1 = new platform(0, 460, 125, 30);
 let platform2 = new platform(125, 505, 130, 30);
