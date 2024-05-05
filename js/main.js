@@ -1,10 +1,13 @@
 //Imports
 //import { platform, platformArray } from "./level-1.js";
+import { Platform, platformArray } from "../js/level-1.js";
+import { PlatformTwo, platformTwoArray } from "../js/level-2.js";
+import { mapTiles } from "../js/tiles.js";
 
 // global variable for the background:
 let firstLevelBackground;
 let secondLevelBackground;
-let state = "levelOne";
+let state = "levelTwo";
 
 //Main character variables
 let mainCharacter;
@@ -27,24 +30,13 @@ let jumpCounter = 0;
 // preload images --> loadimage - variable = loadImage("file-path");
 // use img --> image(variable, x, y, width, height);
 function preload() {
-  firstLevelBackground = loadImage("img/level-1.png");
-  secondLevelBackground = loadImage("img/level-2.png");
+  firstLevelBackground = loadImage("img/level-01.png");
+  secondLevelBackground = loadImage("img/level-02.png");
   mainCharacter = loadImage("img/chickenPixel.png");
 }
+window.preload = preload;
 
 // objects
-const backgroundPlacement = {
-  backgroundX: 100,
-  backgroundY: 100,
-  backgroundW: 700,
-  backgroundH: 600,
-};
-
-const characterPlacement = {
-  chickenX: 110,
-  chickenY: 520,
-};
-
 const arrowKey = {
   upArrow: 38,
   rightArrow: 39,
@@ -57,17 +49,10 @@ const arrowKey = {
 
 const coordinates = {
   //canvas xywh
-  backgroundX: 0,
-  backgroundY: 0,
-  backgroundW: 700,
-  backgroundH: 600,
-
-  // borders xywh
-
-  //character xy, scale
-  // chickenX:,
-  // chickenY:,
-  // chickenScale:
+  x: 0,
+  y: 0,
+  width: 1366,
+  height: 768,
 };
 
 /*const background = new Sprite({
@@ -79,11 +64,12 @@ const coordinates = {
 });*/
 
 function setup() {
-  let canvas = createCanvas(800, 800);
+  let canvas = createCanvas(1366, 768);
   canvas.parent("canvas-holder");
   background(255, 255, 255);
   frameRate(30);
 }
+window.setup = setup;
 
 function chicken(chickenX, chickenY) {
   image(mainCharacter, chickenX, chickenY, chickenWidth, chickenHeight);
@@ -234,29 +220,34 @@ function gravity() {
     }
   }
 }
+window.keyReleased = keyReleased;
 
 function levelOne() {
   //image(variable, x, y, width, height);
   image(
     firstLevelBackground,
-    coordinates.backgroundX,
-    coordinates.backgroundY,
-    coordinates.backgroundW,
-    coordinates.backgroundH
+    coordinates.x,
+    coordinates.y,
+    coordinates.width,
+    coordinates.height
   );
   chicken(chickenX, chickenY, chickenWidth, chickenHeight);
   movement();
   gravity();
+  mapTiles();
 }
 
 function levelTwo(x, y) {
   image(
     secondLevelBackground,
-    coordinates.backgroundX,
-    coordinates.backgroundY,
-    coordinates.backgroundW,
-    coordinates.backgroundH
+    coordinates.x,
+    coordinates.y,
+    coordinates.width,
+    coordinates.height
   );
+  chicken(chickenX, chickenY);
+  movement();
+  mapTiles();
 }
 
 function draw() {
@@ -272,3 +263,4 @@ function draw() {
   }
   coordinatePointer(); // makes the exact coordinates of the canvas visible with mouse
 }
+window.draw = draw;
