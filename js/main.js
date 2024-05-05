@@ -1,7 +1,7 @@
 //Imports
-//import { platform, platformArray } from "./level-1.js";
-import { Platform, platformArray } from "../js/level-1.js";
-import { PlatformTwo, platformTwoArray } from "../js/level-2.js";
+//import { Platform, platformArray } from "../js/level-1.js";
+import { gridData } from "../js/level-1.js";
+//import { PlatformTwo, platformTwoArray } from "../js/level-2.js";
 import { mapTiles } from "../js/tiles.js";
 
 // global variable for the background:
@@ -11,8 +11,8 @@ let state = "levelTwo";
 
 //Main character variables
 let mainCharacter;
-let chickenY = 420;
-let chickenX = 30;
+let chickenY = 320;
+let chickenX = 40;
 let speed = 0;
 const chickenWidth = 50;
 const chickenHeight = 60;
@@ -94,7 +94,7 @@ function coordinatePointer() {
 // Storing the platforms
 // Will be moved to level-1 file later, problem with import.
 
-class platform {
+/*class platform {
   constructor(x, y, width, height) {
     this.x = x;
     this.y = y;
@@ -121,9 +121,9 @@ let platformArray = [
   new platform(352, 303, 57, 22),
   new platform(515, 255, 59, 22),
   new platform(644, 252, 56, 23),
-];
+];*/
 
-class Ground {
+/*class Ground {
   constructor(x, y, width, height) {
     this.x = x;
     this.y = y;
@@ -132,7 +132,7 @@ class Ground {
   }
 }
 
-let groundArray = [];
+let groundArray = [];*/
 
 function movement() {
   chickenX += speed;
@@ -145,21 +145,8 @@ function movement() {
       speed = 0;
     }
   }
-}
-
-function keyPressed() {
-  if (keyIsPressed) {
-    if (keyCode === arrowKey.leftArrow) {
-      speed = -5;
-    } else if (keyCode === arrowKey.rightArrow) {
-      speed = 5;
-    } else {
-      speed = 0;
-    }
-
-    if (keyCode === arrowKey.spacebarKey || keyCode === arrowKey.upArrow) {
-      jump = true;
-    }
+  if (keyCode === arrowKey.spacebarKey || keyCode === arrowKey.upArrow) {
+    jump = true;
   }
 }
 
@@ -177,12 +164,21 @@ function keyReleased() {
 //
 
 function gravity() {
-  chickenX += speed;
   let onPlatform = false; // Flag to check if the chicken is on a platform
-  let platformY = chickenY + chickenHeight;
+  const tileSize = 32;
+  const gridX = floor(chickenX / tileSize);
+  const gridY = floor((chickenY + chickenHeight) / tileSize);
 
   // Check collision with each platform
-  for (let i = 0; i < platformArray.length; i++) {
+  if (
+    gridY < gridData.length &&
+    gridX < gridData[gridY].length &&
+    gridData[gridY][gridX] === 1
+  ) {
+    onPlatform = true;
+  }
+  
+  /*for (let i = 0; i < platformArray.length; i++) {
     let platform = platformArray[i];
     if (
       chickenX + chickenWidth > platform.x &&
@@ -195,14 +191,14 @@ function gravity() {
       platformY = platform.y;
       break; // Exit the loop since we don't need to check other platforms
     }
-  }
+  }*/
 
   if (onPlatform) {
     if (jump && jumpCounter < jumpPower) {
       velocity = -jumpPower;
       jumpCounter++;
     } else {
-      chickenY = platformY - chickenHeight;
+      chickenY = gridY * tileSize - chickenHeight;
       jumpCounter = 0; // reset jumpCounter
       velocity = 0; // reset velocity
     }
