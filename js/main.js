@@ -2,11 +2,14 @@
 //import { Platform, platformArray } from "../js/level-1.js";
 import { gridData } from "../js/tiles.js";
 //import { PlatformTwo, platformTwoArray } from "../js/level-2.js";
+import { Button } from "../js/button.js";
+import { TextBox } from "../js/textbox.js";
 import { mapTiles } from "../js/tiles.js";
 
 // global variable for the background:
 let firstLevelBackground;
 let secondLevelBackground;
+
 let state = "levelTwo";
 
 //Main character variables
@@ -80,7 +83,7 @@ function chicken(chickenX, chickenY) {
 // https://p5js.org/learn/interactivity.html - 2024-04-12
 // https://chat.openai.com/share/9c07c535-912e-48df-9b54-6b2999925ddb - 2024-04-12
 function coordinatePointer() {
-  cursor(CROSS);
+  // cursor(CROSS);
   textSize(20);
   textStyle(BOLD);
 
@@ -251,6 +254,59 @@ function gravity() {
 }
 window.keyReleased = keyReleased;
 
+function startScreen() {
+  if (state === "startScreen") {
+    image(
+      firstLevelBackground,
+      coordinates.x,
+      coordinates.y,
+      coordinates.width,
+      coordinates.height
+    );
+
+    let textB = new TextBox(80, 320, 400, 80, "Chicken Platform");
+
+    let levelOneButton = new Button(40, 440, 200, 40, "Level 1");
+    let levelTwoButton = new Button(320, 440, 200, 40, "Level 2");
+
+    textB.draw();
+    levelOneButton.draw();
+    levelTwoButton.draw();
+
+    mapTiles();
+  }
+}
+
+//! Not working yet ------------------------------------------------------------
+function resultScreen() {
+  if (state === "win") {
+    image(
+      firstLevelBackground,
+      coordinates.x,
+      coordinates.y,
+      coordinates.width,
+      coordinates.height
+    );
+    let textB = new TextBox(80, 320, 400, 80, "You Won!");
+
+    let levelOneButton = new Button(40, 440, 200, 40, "Level 1");
+    let levelTwoButton = new Button(320, 440, 200, 40, "Level 2");
+
+    textB.draw();
+    levelOneButton.draw();
+    levelTwoButton.draw();
+  } else if (state === "loss") {
+    let textB = new TextBox(80, 320, 400, 80, "You Lost!");
+    let levelOneButton = new Button(40, 440, 200, 40, "Level 1");
+    let levelTwoButton = new Button(320, 440, 200, 40, "Level 2");
+
+    textB.draw();
+    levelOneButton.draw();
+    levelTwoButton.draw();
+    mapTiles();
+  }
+}
+
 function levelOne() {
   //image(variable, x, y, width, height);
   image(
@@ -266,7 +322,7 @@ function levelOne() {
   mapTiles();
 }
 
-function levelTwo(x, y) {
+function levelTwo() {
   image(
     secondLevelBackground,
     coordinates.x,
@@ -278,6 +334,21 @@ function levelTwo(x, y) {
   movement();
   mapTiles();
 }
+
+//! Gives error ---------------------------------------------------------------------------------------------------------
+function mouseClicked() {
+  if (levelOneButton.hitTest(mouseX, mouseY) && state === "starScreen") {
+    state = "levelOne";
+    levelOne();
+  } else if (
+    levelTwoButton.hitTest(mouseX, mouseY) &&
+    state === "startScreen"
+  ) {
+    state = "levelTwo";
+    levelTwo();
+  }
+}
+window.mouseClicked = mouseClicked;
 
 function draw() {
   clear();
