@@ -1,6 +1,6 @@
 //Imports
 //import { Platform, platformArray } from "../js/level-1.js";
-import { gridData } from "../js/level-1.js";
+import { gridData } from "../js/tiles.js";
 //import { PlatformTwo, platformTwoArray } from "../js/level-2.js";
 import { mapTiles } from "../js/tiles.js";
 
@@ -165,7 +165,7 @@ function keyReleased() {
 
 function gravity() {
   let onPlatform = false; // Flag to check if the chicken is on a platform
-  const tileSize = 32;
+  const tileSize = 40;
   const gridX = floor(chickenX / tileSize);
   const gridY = floor((chickenY + chickenHeight) / tileSize);
 
@@ -177,7 +177,7 @@ function gravity() {
   ) {
     onPlatform = true;
   }
-  
+
   /*for (let i = 0; i < platformArray.length; i++) {
     let platform = platformArray[i];
     if (
@@ -193,14 +193,14 @@ function gravity() {
     }
   }*/
 
-  if (onPlatform) {
+  /*if (onPlatform) {
     if (jump && jumpCounter < jumpPower) {
       velocity = -jumpPower;
       jumpCounter++;
     } else {
       chickenY = gridY * tileSize - chickenHeight;
-      jumpCounter = 0; // reset jumpCounter
-      velocity = 0; // reset velocity
+      jumpCounter = 0;
+      velocity = 0;
     }
   } else {
     chickenY += direction * velocity;
@@ -214,7 +214,40 @@ function gravity() {
     } else {
       velocity = fallingSpeed;
     }
+  }*/
+
+  // Apply gravity and handle jumping
+  if (onPlatform) {
+    // Reset velocity and jumpCounter when on a platform and not jumping
+    if (!jump) {
+      velocity = 0;
+      jumpCounter = 0;
+    } else if (jumpCounter < jumpPower) {
+      // Apply upward velocity for jumping
+      velocity = -jumpPower;
+      jumpCounter++;
+    } else {
+      // Stop jumping when jumpCounter reaches jumpPower
+      velocity = 0;
+      jumpCounter = 0;
+      jump = false;
+    }
+  } else {
+    // Apply downward velocity when not on a platform
+    velocity = fallingSpeed;
+
+    // Handle jumping while in the air
+    if (jump && jumpCounter < jumpPower) {
+      velocity = -jumpPower;
+      jumpCounter++;
+    }
   }
+
+  // Update the chicken's position
+  chickenY += direction * velocity;
+
+  // Ensure the chicken stays within the canvas boundaries
+  chickenY = constrain(chickenY, 0, height - chickenHeight);
 }
 window.keyReleased = keyReleased;
 
