@@ -10,7 +10,8 @@ import { mapTiles } from "../js/tiles.js";
 let firstLevelBackground;
 let secondLevelBackground;
 
-let state = "levelTwo";
+let state = "startScreen";
+let timer = 18;
 
 //Main character variables
 let mainCharacter;
@@ -73,6 +74,25 @@ function setup() {
   frameRate(30);
 }
 window.setup = setup;
+
+function numberInfo() {
+  // the following 2 lines of code was adapted from: https://editor.p5js.org/marynotari/sketches/S1T2ZTMp- - 2024-05-06
+  // if (frameCount % 60 === 0 && timer > 0) {
+  //   timer--;
+
+  push();
+  fill(0, 0, 0);
+  text("time", 4, 65);
+  text("velocity", 4, 106);
+
+  text(timer, 88, 65);
+  text(Math.floor(velocity), 88, 106);
+  pop();
+}
+if (timer === 0) {
+  let timerText = new TextBox("Game Over!", 30, 20);
+}
+// }
 
 function chicken(chickenX, chickenY) {
   image(mainCharacter, chickenX, chickenY, chickenWidth, chickenHeight);
@@ -264,12 +284,12 @@ function startScreen() {
       coordinates.height
     );
 
-    let textB = new TextBox(80, 320, 400, 80, "Chicken Platform");
+    let winLoss = new TextBox(80, 320, 400, 80, "Chicken Platform");
 
     let levelOneButton = new Button(40, 440, 200, 40, "Level 1");
     let levelTwoButton = new Button(320, 440, 200, 40, "Level 2");
 
-    textB.draw();
+    winLoss.draw();
     levelOneButton.draw();
     levelTwoButton.draw();
 
@@ -287,25 +307,52 @@ function resultScreen() {
       coordinates.width,
       coordinates.height
     );
-    let textB = new TextBox(80, 320, 400, 80, "You Won!");
+    let winLoss = new TextBox(80, 320, 400, 80, "You Won!");
 
     let levelOneButton = new Button(40, 440, 200, 40, "Level 1");
     let levelTwoButton = new Button(320, 440, 200, 40, "Level 2");
 
-    textB.draw();
+    winLoss.draw();
     levelOneButton.draw();
     levelTwoButton.draw();
   } else if (state === "loss") {
-    let textB = new TextBox(80, 320, 400, 80, "You Lost!");
+    image(
+      secondLevelBackground,
+      coordinates.x,
+      coordinates.y,
+      coordinates.width,
+      coordinates.height
+    );
+    let winLoss = new TextBox(80, 320, 400, 80, "You Lost!");
+
     let levelOneButton = new Button(40, 440, 200, 40, "Level 1");
     let levelTwoButton = new Button(320, 440, 200, 40, "Level 2");
 
-    textB.draw();
+    winLoss.draw();
     levelOneButton.draw();
     levelTwoButton.draw();
     mapTiles();
   }
 }
+
+function mouseClicked() {
+  let levelOneButton = new Button(40, 440, 200, 40, "Level 1");
+  let levelTwoButton = new Button(320, 440, 200, 40, "Level 2");
+
+  if (levelOneButton.hitTest(mouseX, mouseY) && state === "startScreen") {
+    state = "levelOne";
+    levelOne();
+    // reset character position
+  } else if (
+    levelTwoButton.hitTest(mouseX, mouseY) &&
+    state === "startScreen"
+  ) {
+    state = "levelTwo";
+    levelTwo();
+    // reset character position
+  }
+}
+window.mouseClicked = mouseClicked;
 
 function levelOne() {
   //image(variable, x, y, width, height);
@@ -316,6 +363,7 @@ function levelOne() {
     coordinates.width,
     coordinates.height
   );
+  numberInfo();
   chicken(chickenX, chickenY, chickenWidth, chickenHeight);
   movement();
   gravity();
@@ -330,25 +378,11 @@ function levelTwo() {
     coordinates.width,
     coordinates.height
   );
+  numberInfo();
   chicken(chickenX, chickenY);
   movement();
   mapTiles();
 }
-
-//! Gives error ---------------------------------------------------------------------------------------------------------
-function mouseClicked() {
-  if (levelOneButton.hitTest(mouseX, mouseY) && state === "starScreen") {
-    state = "levelOne";
-    levelOne();
-  } else if (
-    levelTwoButton.hitTest(mouseX, mouseY) &&
-    state === "startScreen"
-  ) {
-    state = "levelTwo";
-    levelTwo();
-  }
-}
-window.mouseClicked = mouseClicked;
 
 function draw() {
   clear();
