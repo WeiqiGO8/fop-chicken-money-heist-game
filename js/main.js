@@ -144,7 +144,7 @@ function keyReleased() {
 //https://chat.openai.com/share/28fefe10-0739-4420-8a4c-10edff61a6a8 - 28-04-2024
 //
 
-function gravity() {
+function gravity1() {
   let onPlatform = false; // Flag to check if the chicken is on a platform
   const tileSize = 40;
   const gridX = floor(chickenX / tileSize);
@@ -208,56 +208,55 @@ function gravity() {
   chickenY = constrain(chickenY, 0, height - chickenHeight);
 }
 
-/*function gravity() {
+function gravity2() {
+  let onPlatform = false; // Flag to check if the chicken is on a platform
   const tileSize = 40;
-  let newY = chickenY + direction * velocity; // Calculate the new Y position after applying gravity
+  const gridX = floor(chickenX / tileSize);
+  const gridY = floor((chickenY + chickenHeight) / tileSize);
 
-  // Check for collision with each platform
-  for (let i = 0; i < gridData1.length; i++) {
-    for (let j = 0; j < gridData1[i].length; j++) {
-      if (gridData1[i][j] === 1) {
-        const platformX = j * tileSize;
-        const platformY = i * tileSize;
-
-        // Check if the character's new position would intersect with the platform
-        if (
-          newY + chickenHeight >= platformY &&
-          newY < platformY + tileSize &&
-          chickenX >= platformX &&
-          chickenX < platformX + tileSize
-        ) {
-          // If there's an intersection, adjust the character's position to be on top of the platform
-          newY = platformY - chickenHeight;
-          velocity = 0; // Stop the character's vertical movement
-          jumpCounter = 0; // Reset the jump counter
-          jump = false; // Reset the jump flag
-          break; // Exit the inner loop since we found a collision
-        }
-      }
-    }
+  // Check collision with each platform
+  if (
+    gridY < gridData2.length &&
+    gridX < gridData2[gridY].length &&
+    gridData2[gridY][gridX] === 1
+  ) {
+    onPlatform = true;
   }
 
   // Apply gravity and handle jumping
-  if (!jump) {
-    // Apply downward velocity when not jumping
-    velocity = fallingSpeed;
-  } else if (jumpCounter < jumpPower) {
-    // Apply upward velocity for jumping
-    velocity = -jumpPower;
-    jumpCounter++;
+  if (onPlatform) {
+    // Reset velocity and jumpCounter when on a platform and not jumping
+    if (!jump) {
+      velocity = 0;
+      jumpCounter = 0;
+    } else if (jumpCounter < jumpPower) {
+      // Apply upward velocity for jumping
+      velocity = -jumpPower;
+      jumpCounter++;
+    } else {
+      // Stop jumping when jumpCounter reaches jumpPower
+      velocity = 0;
+      jumpCounter = 0;
+      jump = false;
+    }
   } else {
-    // Stop jumping when jumpCounter reaches jumpPower
-    velocity = 0;
-    jumpCounter = 0;
-    jump = false;
+    // Apply downward velocity when not on a platform
+    velocity = fallingSpeed;
+
+    // Handle jumping while in the air
+    if (jump && jumpCounter < jumpPower) {
+      velocity = -jumpPower;
+      jumpCounter++;
+    }
   }
 
   // Update the chicken's position
-  chickenY = newY;
+  chickenY += direction * velocity;
 
   // Ensure the chicken stays within the canvas boundaries
   chickenY = constrain(chickenY, 0, height - chickenHeight);
-}*/
+}
+
 
 window.keyReleased = keyReleased;
 
@@ -353,7 +352,7 @@ function levelOne() {
   numberInfo();
   chicken(chickenX, chickenY, chickenWidth, chickenHeight);
   movement();
-  gravity();
+  gravity1();
   mapTiles();
 }
 
@@ -368,6 +367,7 @@ function levelTwo() {
   numberInfo();
   chicken(chickenX, chickenY);
   movement();
+  gravity2();
   mapTiles();
 }
 
@@ -423,3 +423,54 @@ window.draw = draw;
       velocity = fallingSpeed;
     }
   }*/
+
+  /*function gravity() {
+  const tileSize = 40;
+  let newY = chickenY + direction * velocity; // Calculate the new Y position after applying gravity
+
+  // Check for collision with each platform
+  for (let i = 0; i < gridData1.length; i++) {
+    for (let j = 0; j < gridData1[i].length; j++) {
+      if (gridData1[i][j] === 1) {
+        const platformX = j * tileSize;
+        const platformY = i * tileSize;
+
+        // Check if the character's new position would intersect with the platform
+        if (
+          newY + chickenHeight >= platformY &&
+          newY < platformY + tileSize &&
+          chickenX >= platformX &&
+          chickenX < platformX + tileSize
+        ) {
+          // If there's an intersection, adjust the character's position to be on top of the platform
+          newY = platformY - chickenHeight;
+          velocity = 0; // Stop the character's vertical movement
+          jumpCounter = 0; // Reset the jump counter
+          jump = false; // Reset the jump flag
+          break; // Exit the inner loop since we found a collision
+        }
+      }
+    }
+  }
+
+  // Apply gravity and handle jumping
+  if (!jump) {
+    // Apply downward velocity when not jumping
+    velocity = fallingSpeed;
+  } else if (jumpCounter < jumpPower) {
+    // Apply upward velocity for jumping
+    velocity = -jumpPower;
+    jumpCounter++;
+  } else {
+    // Stop jumping when jumpCounter reaches jumpPower
+    velocity = 0;
+    jumpCounter = 0;
+    jump = false;
+  }
+
+  // Update the chicken's position
+  chickenY = newY;
+
+  // Ensure the chicken stays within the canvas boundaries
+  chickenY = constrain(chickenY, 0, height - chickenHeight);
+}*/
