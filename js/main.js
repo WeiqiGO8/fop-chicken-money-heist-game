@@ -1,6 +1,7 @@
 //Imports
 //import { Platform, platformArray } from "../js/level-1.js";
-import { gridData } from "../js/tiles.js";
+import { gridData1 } from "../js/tiles.js";
+import { gridData2 } from "../js/tiles.js";
 //import { PlatformTwo, platformTwoArray } from "../js/level-2.js";
 import { Button } from "../js/button.js";
 import { TextBox } from "../js/textbox.js";
@@ -15,7 +16,7 @@ let timer = 18;
 
 //Main character variables
 let mainCharacter;
-let chickenY = 320;
+let chickenY = 460;
 let chickenX = 40;
 let speed = 0;
 const chickenWidth = 50;
@@ -114,49 +115,6 @@ function coordinatePointer() {
   line(0, mouseY, width, mouseY);
 }
 
-// Storing the platforms
-// Will be moved to level-1 file later, problem with import.
-
-/*class platform {
-  constructor(x, y, width, height) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-  }
-}
-
-let platformArray = [
-  new platform(0, 460, 125, 30), //Row 1, from the left
-  new platform(125, 505, 130, 30),
-  new platform(258, 477, 125, 25),
-  new platform(384, 505, 157, 34),
-  new platform(540, 435, 160, 30),
-  new platform(0, 344, 179, 34), //Row 2
-  new platform(179, 402, 125, 27),
-  new platform(319, 379, 132, 31),
-  new platform(451, 439, 65, 22),
-  new platform(540, 433, 160, 34),
-  new platform(515, 334, 185, 31), //Row 3
-  new platform(0, 206, 57, 38), //Row 4
-  new platform(117, 214, 134, 36),
-  new platform(215, 280, 74, 28),
-  new platform(352, 303, 57, 22),
-  new platform(515, 255, 59, 22),
-  new platform(644, 252, 56, 23),
-];*/
-
-/*class Ground {
-  constructor(x, y, width, height) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-  }
-}
-
-let groundArray = [];*/
-
 function movement() {
   chickenX += speed;
   if (keyIsPressed) {
@@ -194,48 +152,25 @@ function gravity() {
 
   // Check collision with each platform
   if (
-    gridY < gridData.length &&
-    gridX < gridData[gridY].length &&
-    gridData[gridY][gridX] === 1
+    gridY < gridData1.length &&
+    gridX < gridData1[gridY].length &&
+    gridData1[gridY][gridX] === 1
   ) {
     onPlatform = true;
   }
 
-  /*for (let i = 0; i < platformArray.length; i++) {
-    let platform = platformArray[i];
-    if (
-      chickenX + chickenWidth > platform.x &&
-      chickenX < platform.x + platform.width &&
-      chickenY + chickenHeight >= platform.y &&
-      chickenY < platform.y + platform.height
-    ) {
-      // Chicken is colliding with a platform
-      onPlatform = true;
-      platformY = platform.y;
-      break; // Exit the loop since we don't need to check other platforms
-    }
-  }*/
+  // Check collision at multiple points along the chicken's height
+  /*for (let i = 0; i < chickenHeight; i += tileSize) {
+    const gridX = floor(chickenX / tileSize);
+    const gridY = floor((chickenY + i) / tileSize);
 
-  /*if (onPlatform) {
-    if (jump && jumpCounter < jumpPower) {
-      velocity = -jumpPower;
-      jumpCounter++;
-    } else {
-      chickenY = gridY * tileSize - chickenHeight;
-      jumpCounter = 0;
-      velocity = 0;
-    }
-  } else {
-    chickenY += direction * velocity;
-    if (jump) {
-      if (jumpCounter >= jumpPower) {
-        velocity = fallingSpeed;
-      } else {
-        velocity = -jumpPower;
-        jumpCounter++;
-      }
-    } else {
-      velocity = fallingSpeed;
+    if (
+      gridY < gridData1.length &&
+      gridX < gridData1[gridY].length &&
+      gridData1[gridY][gridX] === 1
+    ) {
+      onPlatform = true;
+      break; // Exit the loop if a collision is detected
     }
   }*/
 
@@ -272,6 +207,58 @@ function gravity() {
   // Ensure the chicken stays within the canvas boundaries
   chickenY = constrain(chickenY, 0, height - chickenHeight);
 }
+
+/*function gravity() {
+  const tileSize = 40;
+  let newY = chickenY + direction * velocity; // Calculate the new Y position after applying gravity
+
+  // Check for collision with each platform
+  for (let i = 0; i < gridData1.length; i++) {
+    for (let j = 0; j < gridData1[i].length; j++) {
+      if (gridData1[i][j] === 1) {
+        const platformX = j * tileSize;
+        const platformY = i * tileSize;
+
+        // Check if the character's new position would intersect with the platform
+        if (
+          newY + chickenHeight >= platformY &&
+          newY < platformY + tileSize &&
+          chickenX >= platformX &&
+          chickenX < platformX + tileSize
+        ) {
+          // If there's an intersection, adjust the character's position to be on top of the platform
+          newY = platformY - chickenHeight;
+          velocity = 0; // Stop the character's vertical movement
+          jumpCounter = 0; // Reset the jump counter
+          jump = false; // Reset the jump flag
+          break; // Exit the inner loop since we found a collision
+        }
+      }
+    }
+  }
+
+  // Apply gravity and handle jumping
+  if (!jump) {
+    // Apply downward velocity when not jumping
+    velocity = fallingSpeed;
+  } else if (jumpCounter < jumpPower) {
+    // Apply upward velocity for jumping
+    velocity = -jumpPower;
+    jumpCounter++;
+  } else {
+    // Stop jumping when jumpCounter reaches jumpPower
+    velocity = 0;
+    jumpCounter = 0;
+    jump = false;
+  }
+
+  // Update the chicken's position
+  chickenY = newY;
+
+  // Ensure the chicken stays within the canvas boundaries
+  chickenY = constrain(chickenY, 0, height - chickenHeight);
+}*/
+
 window.keyReleased = keyReleased;
 
 function startScreen() {
@@ -398,3 +385,41 @@ function draw() {
   coordinatePointer(); // makes the exact coordinates of the canvas visible with mouse
 }
 window.draw = draw;
+
+/*for (let i = 0; i < platformArray.length; i++) {
+    let platform = platformArray[i];
+    if (
+      chickenX + chickenWidth > platform.x &&
+      chickenX < platform.x + platform.width &&
+      chickenY + chickenHeight >= platform.y &&
+      chickenY < platform.y + platform.height
+    ) {
+      // Chicken is colliding with a platform
+      onPlatform = true;
+      platformY = platform.y;
+      break; // Exit the loop since we don't need to check other platforms
+    }
+  }*/
+
+/*if (onPlatform) {
+    if (jump && jumpCounter < jumpPower) {
+      velocity = -jumpPower;
+      jumpCounter++;
+    } else {
+      chickenY = gridY * tileSize - chickenHeight;
+      jumpCounter = 0;
+      velocity = 0;
+    }
+  } else {
+    chickenY += direction * velocity;
+    if (jump) {
+      if (jumpCounter >= jumpPower) {
+        velocity = fallingSpeed;
+      } else {
+        velocity = -jumpPower;
+        jumpCounter++;
+      }
+    } else {
+      velocity = fallingSpeed;
+    }
+  }*/
