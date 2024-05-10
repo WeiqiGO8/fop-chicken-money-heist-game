@@ -257,7 +257,6 @@ function gravity2() {
   chickenY = constrain(chickenY, 0, height - chickenHeight);
 }
 
-
 window.keyReleased = keyReleased;
 
 function startScreen() {
@@ -424,7 +423,7 @@ window.draw = draw;
     }
   }*/
 
-  /*function gravity() {
+/*function gravity() {
   const tileSize = 40;
   let newY = chickenY + direction * velocity; // Calculate the new Y position after applying gravity
 

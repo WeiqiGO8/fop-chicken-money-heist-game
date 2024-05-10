@@ -10,16 +10,19 @@ class Button {
   draw() {
     push();
     translate(this.x, this.y);
-    stroke("#4d4d4d");
+
+    stroke("#000000");
     strokeWeight(4);
-    fill("#cccccc");
+    fill("#ffffff");
     rect(0, 0, this.width, this.height);
+
     //define text
     noStroke();
-    fill("#4d4d4d");
+    fill("#000000");
     textSize(this.height / 2);
     textAlign(CENTER);
     text(this.text, 0, this.height / 4, this.width);
+
     pop();
   }
 
@@ -32,22 +35,5 @@ class Button {
     );
   }
 }
-
-// const myButton = new Button(100, 100, 160, 40, "hello");
-// const worldButton = new Button(100, 300, 260, 60, "world");
-
-// function draw() {
-//   background(255, 255, 255);
-//   if (mouseIsPressed) {
-//     if (myButton.hitTest(mouseX, mouseY)) {
-//       background(255, 0, 0);
-//     } else if (worldButton.hitTest(mouseX, mouseY)) {
-//       background(0, 255, 0);
-//     }
-//   }
-
-//   myButton.draw();
-//   worldButton.draw();
-// }
 
 export { Button };
