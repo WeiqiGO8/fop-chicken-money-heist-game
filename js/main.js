@@ -10,7 +10,7 @@ import { mapTiles } from "../js/tiles.js";
 // global variable for the background:
 let firstLevelBackground;
 let secondLevelBackground;
-
+let coinImage;
 let state = "startScreen";
 let timer = 18;
 
@@ -19,16 +19,16 @@ let mainCharacter;
 let chickenY = 460;
 let chickenX = 40;
 let speed = 0;
-const chickenWidth = 50;
-const chickenHeight = 60;
+const chickenWidth = 40;
+const chickenHeight = 40;
 
-//Gravity
-let jump = false; //Is character jumping?
-let direction = 1; // Force of gravity in Y direction
-let velocity = 2;
+//Gravity variables
+let jump = false;
+let direction = 1;
+let velocity = 5;
 let jumpPower = 10;
-let fallingSpeed = 2;
-let maxHeight = 50;
+let fallingSpeed = 1;
+let acceleration = 2;
 let jumpCounter = 0;
 
 // load images - variable = loadImage("file-path");
@@ -38,6 +38,7 @@ function preload() {
   firstLevelBackground = loadImage("img/level-01.png");
   secondLevelBackground = loadImage("img/level-02.png");
   mainCharacter = loadImage("img/chickenPixel.png");
+  coinImage = loadImage("img/coin.png");
 }
 window.preload = preload;
 
@@ -99,6 +100,23 @@ function chicken(chickenX, chickenY) {
   image(mainCharacter, chickenX, chickenY, chickenWidth, chickenHeight);
 }
 
+/*class Coin {
+  constructor(coinImage, x, y, width, height) {
+    this.coinImage = coinImage;
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+  }
+}
+
+coinArray = [
+  new Coin (coinImage, 260, 260, 40, 40),
+  new Coin (coinImage, 1060, 218, 40, 40),
+  new Coin (coinImage, 1340, 380, 40, 40),
+  new Coin (coinImage, 940, 540, 40, 40),
+]*/
+
 // function to make it easier to work with the game - make up for the loss of p5canvas pluggin
 // the following 24 lines of code was adapted from:
 // https://p5js.org/learn/interactivity.html - 2024-04-12
@@ -144,7 +162,7 @@ function keyReleased() {
 //https://chat.openai.com/share/28fefe10-0739-4420-8a4c-10edff61a6a8 - 28-04-2024
 //
 
-function gravity1() {
+function gravity(gridData) {
   let onPlatform = false; // Flag to check if the chicken is on a platform
   const tileSize = 40;
   const gridX = floor(chickenX / tileSize);
@@ -152,53 +170,34 @@ function gravity1() {
 
   // Check collision with each platform
   if (
-    gridY < gridData1.length &&
-    gridX < gridData1[gridY].length &&
-    gridData1[gridY][gridX] === 1
+    gridY < gridData.length &&
+    gridX < gridData[gridY].length &&
+    gridData[gridY][gridX] === 1
   ) {
     onPlatform = true;
   }
 
-  // Check collision at multiple points along the chicken's height
-  /*for (let i = 0; i < chickenHeight; i += tileSize) {
-    const gridX = floor(chickenX / tileSize);
-    const gridY = floor((chickenY + i) / tileSize);
-
-    if (
-      gridY < gridData1.length &&
-      gridX < gridData1[gridY].length &&
-      gridData1[gridY][gridX] === 1
-    ) {
-      onPlatform = true;
-      break; // Exit the loop if a collision is detected
-    }
-  }*/
-
-  // Apply gravity and handle jumping
   if (onPlatform) {
-    // Reset velocity and jumpCounter when on a platform and not jumping
     if (!jump) {
       velocity = 0;
       jumpCounter = 0;
     } else if (jumpCounter < jumpPower) {
-      // Apply upward velocity for jumping
-      velocity = -jumpPower;
+      velocity -= jumpPower;
       jumpCounter++;
     } else {
-      // Stop jumping when jumpCounter reaches jumpPower
       velocity = 0;
       jumpCounter = 0;
       jump = false;
     }
   } else {
-    // Apply downward velocity when not on a platform
-    velocity = fallingSpeed;
-
-    // Handle jumping while in the air
-    if (jump && jumpCounter < jumpPower) {
-      velocity = -jumpPower;
-      jumpCounter++;
+    if (!onPlatform) {
+      velocity = fallingSpeed + acceleration;
     }
+  }
+
+  if (jump === true && jumpCounter < jumpPower) {
+    velocity -= jumpPower;
+    jumpCounter++;
   }
 
   // Update the chicken's position
@@ -207,56 +206,6 @@ function gravity1() {
   // Ensure the chicken stays within the canvas boundaries
   chickenY = constrain(chickenY, 0, height - chickenHeight);
 }
-
-function gravity2() {
-  let onPlatform = false; // Flag to check if the chicken is on a platform
-  const tileSize = 40;
-  const gridX = floor(chickenX / tileSize);
-  const gridY = floor((chickenY + chickenHeight) / tileSize);
-
-  // Check collision with each platform
-  if (
-    gridY < gridData2.length &&
-    gridX < gridData2[gridY].length &&
-    gridData2[gridY][gridX] === 1
-  ) {
-    onPlatform = true;
-  }
-
-  // Apply gravity and handle jumping
-  if (onPlatform) {
-    // Reset velocity and jumpCounter when on a platform and not jumping
-    if (!jump) {
-      velocity = 0;
-      jumpCounter = 0;
-    } else if (jumpCounter < jumpPower) {
-      // Apply upward velocity for jumping
-      velocity = -jumpPower;
-      jumpCounter++;
-    } else {
-      // Stop jumping when jumpCounter reaches jumpPower
-      velocity = 0;
-      jumpCounter = 0;
-      jump = false;
-    }
-  } else {
-    // Apply downward velocity when not on a platform
-    velocity = fallingSpeed;
-
-    // Handle jumping while in the air
-    if (jump && jumpCounter < jumpPower) {
-      velocity = -jumpPower;
-      jumpCounter++;
-    }
-  }
-
-  // Update the chicken's position
-  chickenY += direction * velocity;
-
-  // Ensure the chicken stays within the canvas boundaries
-  chickenY = constrain(chickenY, 0, height - chickenHeight);
-}
-
 
 window.keyReleased = keyReleased;
 
@@ -352,8 +301,9 @@ function levelOne() {
   numberInfo();
   chicken(chickenX, chickenY, chickenWidth, chickenHeight);
   movement();
-  gravity1();
+  gravity(gridData1);
   mapTiles();
+  //coinArray;
 }
 
 function levelTwo() {
@@ -367,7 +317,7 @@ function levelTwo() {
   numberInfo();
   chicken(chickenX, chickenY);
   movement();
-  gravity2();
+  gravity(gridData2);
   mapTiles();
 }
 
@@ -424,7 +374,7 @@ window.draw = draw;
     }
   }*/
 
-  /*function gravity() {
+/*function gravity() {
   const tileSize = 40;
   let newY = chickenY + direction * velocity; // Calculate the new Y position after applying gravity
 
