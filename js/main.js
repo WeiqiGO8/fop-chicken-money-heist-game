@@ -16,11 +16,13 @@ let timer = 18;
 
 //Main character variables
 let mainCharacter;
-let chickenY = 460;
-let chickenX = 40;
+let chickenY = 560;
+let chickenX = 0;
 let speed = 0;
 const chickenWidth = 40;
 const chickenHeight = 40;
+
+let enemyCharacter;
 
 //Gravity variables
 let jump = false;
@@ -38,6 +40,7 @@ function preload() {
   firstLevelBackground = loadImage("img/level-01.png");
   secondLevelBackground = loadImage("img/level-02.png");
   mainCharacter = loadImage("img/chickenPixel.png");
+  //enemyCharacter = loadImage("img/henPixel.png");
   coinImage = loadImage("img/coin.png");
 }
 window.preload = preload;
@@ -69,11 +72,43 @@ const coordinates = {
   imageSrc: "./img/level-1.png",
 });*/
 
+class Coin {
+  constructor(coinImage, x, y, width, height) {
+    this.coinImage = coinImage;
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+  }
+}
+
+let coinArray1;
+let coinArray2;
+
 function setup() {
   let canvas = createCanvas(1366, 768);
   canvas.parent("canvas-holder");
   background(255, 255, 255);
   frameRate(30);
+
+  coinArray1 = [
+    new Coin(coinImage, 240, 200, 40, 40),
+    new Coin(coinImage, 1040, 240, 40, 40),
+    new Coin(coinImage, 1320, 360, 40, 40),
+    new Coin(coinImage, 920, 520, 40, 40),
+    new Coin(coinImage, 80, 360, 40, 40),
+    new Coin(coinImage, 600, 320, 40, 40),
+    new Coin(coinImage, 760, 600, 40, 40),
+    new Coin(coinImage, 280, 520, 40, 40),
+  ];
+
+  coinArray2 = [
+    new Coin(coinImage, 1080, 40, 40, 40),
+    new Coin(coinImage, 200, 560, 40, 40),
+    new Coin(coinImage, 920, 360, 40, 40),
+    new Coin(coinImage, 200, 200, 40, 40),
+    new Coin(coinImage, 600, 40, 40, 40),
+  ];
 }
 window.setup = setup;
 
@@ -99,23 +134,6 @@ if (timer === 0) {
 function chicken(chickenX, chickenY) {
   image(mainCharacter, chickenX, chickenY, chickenWidth, chickenHeight);
 }
-
-/*class Coin {
-  constructor(coinImage, x, y, width, height) {
-    this.coinImage = coinImage;
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
-  }
-}
-
-coinArray = [
-  new Coin (coinImage, 260, 260, 40, 40),
-  new Coin (coinImage, 1060, 218, 40, 40),
-  new Coin (coinImage, 1340, 380, 40, 40),
-  new Coin (coinImage, 940, 540, 40, 40),
-]*/
 
 // function to make it easier to work with the game - make up for the loss of p5canvas pluggin
 // the following 24 lines of code was adapted from:
@@ -206,6 +224,15 @@ function gravity(gridData) {
   // Ensure the chicken stays within the canvas boundaries
   chickenY = constrain(chickenY, 0, height - chickenHeight);
 }
+
+/*function collectCoins(gridData) {
+  if (
+    gridY < gridData.length &&
+    gridX < gridData[gridY].length &&
+    gridData[gridY][gridX] === 3
+  ) {
+  }
+}*/
 
 window.keyReleased = keyReleased;
 
@@ -299,13 +326,18 @@ function levelOne() {
     coordinates.height
   );
   numberInfo();
-  chicken(chickenX, chickenY, chickenWidth, chickenHeight);
+  chicken(chickenX, chickenY);
   movement();
   gravity(gridData1);
   mapTiles();
-  //coinArray;
+  for (let coin of coinArray1) {
+    console.log("coins");
+    image(coin.coinImage, coin.x, coin.y, coin.width, coin.height);
+  }
+  //collectCoins(gridData1);
 }
 
+//chickenY = 320;
 function levelTwo() {
   image(
     secondLevelBackground,
@@ -314,11 +346,17 @@ function levelTwo() {
     coordinates.width,
     coordinates.height
   );
+  //image(enemyCharacter,x,y,w)
   numberInfo();
   chicken(chickenX, chickenY);
   movement();
   gravity(gridData2);
   mapTiles();
+  for (let coin of coinArray2) {
+    console.log("coins");
+    image(coin.coinImage, coin.x, coin.y, coin.width, coin.height);
+  }
+  //collectCoins(gridData2);
 }
 
 function draw() {
@@ -334,93 +372,5 @@ function draw() {
   }
   coordinatePointer(); // makes the exact coordinates of the canvas visible with mouse
 }
+
 window.draw = draw;
-
-/*for (let i = 0; i < platformArray.length; i++) {
-    let platform = platformArray[i];
-    if (
-      chickenX + chickenWidth > platform.x &&
-      chickenX < platform.x + platform.width &&
-      chickenY + chickenHeight >= platform.y &&
-      chickenY < platform.y + platform.height
-    ) {
-      // Chicken is colliding with a platform
-      onPlatform = true;
-      platformY = platform.y;
-      break; // Exit the loop since we don't need to check other platforms
-    }
-  }*/
-
-/*if (onPlatform) {
-    if (jump && jumpCounter < jumpPower) {
-      velocity = -jumpPower;
-      jumpCounter++;
-    } else {
-      chickenY = gridY * tileSize - chickenHeight;
-      jumpCounter = 0;
-      velocity = 0;
-    }
-  } else {
-    chickenY += direction * velocity;
-    if (jump) {
-      if (jumpCounter >= jumpPower) {
-        velocity = fallingSpeed;
-      } else {
-        velocity = -jumpPower;
-        jumpCounter++;
-      }
-    } else {
-      velocity = fallingSpeed;
-    }
-  }*/
-
-/*function gravity() {
-  const tileSize = 40;
-  let newY = chickenY + direction * velocity; // Calculate the new Y position after applying gravity
-
-  // Check for collision with each platform
-  for (let i = 0; i < gridData1.length; i++) {
-    for (let j = 0; j < gridData1[i].length; j++) {
-      if (gridData1[i][j] === 1) {
-        const platformX = j * tileSize;
-        const platformY = i * tileSize;
-
-        // Check if the character's new position would intersect with the platform
-        if (
-          newY + chickenHeight >= platformY &&
-          newY < platformY + tileSize &&
-          chickenX >= platformX &&
-          chickenX < platformX + tileSize
-        ) {
-          // If there's an intersection, adjust the character's position to be on top of the platform
-          newY = platformY - chickenHeight;
-          velocity = 0; // Stop the character's vertical movement
-          jumpCounter = 0; // Reset the jump counter
-          jump = false; // Reset the jump flag
-          break; // Exit the inner loop since we found a collision
-        }
-      }
-    }
-  }
-
-  // Apply gravity and handle jumping
-  if (!jump) {
-    // Apply downward velocity when not jumping
-    velocity = fallingSpeed;
-  } else if (jumpCounter < jumpPower) {
-    // Apply upward velocity for jumping
-    velocity = -jumpPower;
-    jumpCounter++;
-  } else {
-    // Stop jumping when jumpCounter reaches jumpPower
-    velocity = 0;
-    jumpCounter = 0;
-    jump = false;
-  }
-
-  // Update the chicken's position
-  chickenY = newY;
-
-  // Ensure the chicken stays within the canvas boundaries
-  chickenY = constrain(chickenY, 0, height - chickenHeight);
-}*/
