@@ -151,20 +151,65 @@ function coordinatePointer() {
   line(0, mouseY, width, mouseY);
 }
 
+
+// The following function was adapted from:
+// https://stackoverflow.com/questions/35973441/how-to-horizontally-flip-an-image - 2024-05-13
+
+let isFlipped = false;
+
+function flipChicken(mainCharacter, x, y) {
+  push();
+  clear();
+  if (state === "levelOne") { // Solve issue with background being redrawn.
+    image(
+      firstLevelBackground,
+      coordinates.x,
+      coordinates.y,
+      coordinates.width,
+      coordinates.height
+    );
+  } else if (state === "levelTwo") {
+    image(
+      secondLevelBackground,
+      coordinates.x,
+      coordinates.y,
+      coordinates.width,
+      coordinates.height
+    );
+  }
+  if (isFlipped) {
+    translate(x + mainCharacter.width, y);
+    scale(-1, 1);
+    image(mainCharacter, 0, 0, chickenWidth, chickenHeight);
+  } else {
+    image(mainCharacter, x, y, chickenWidth, chickenHeight);
+  }
+  pop();
+}
+
+//Side movement
 function movement() {
   chickenX += speed;
   if (keyIsPressed) {
     if (keyCode === arrowKey.leftArrow) {
       speed = -5;
+      if (!isFlipped) {
+        isFlipped = true;
+      }
     } else if (keyCode === arrowKey.rightArrow) {
       speed = 5;
+      if (isFlipped) {
+        isFlipped = false;
+      }
     } else {
       speed = 0;
     }
   }
+
   if (keyCode === arrowKey.spacebarKey || keyCode === arrowKey.upArrow) {
     jump = true;
   }
+  flipChicken(mainCharacter, chickenX, chickenY);
 }
 
 //Reset
@@ -180,13 +225,14 @@ function keyReleased() {
 //https://chat.openai.com/share/28fefe10-0739-4420-8a4c-10edff61a6a8 - 28-04-2024
 //
 
+//Gravity & Jumping
 function gravity(gridData) {
-  let onPlatform = false; // Flag to check if the chicken is on a platform
+  let onPlatform = false;
   const tileSize = 40;
   const gridX = floor(chickenX / tileSize);
   const gridY = floor((chickenY + chickenHeight) / tileSize);
 
-  // Check collision with each platform
+  // Platform collision
   if (
     gridY < gridData.length &&
     gridX < gridData[gridY].length &&
@@ -214,7 +260,7 @@ function gravity(gridData) {
   }
 
   if (jump === true && jumpCounter < jumpPower) {
-    velocity -= jumpPower;
+    velocity -= jumpPower - 0.3;
     jumpCounter++;
   }
 
@@ -331,7 +377,6 @@ function levelOne() {
   gravity(gridData1);
   mapTiles();
   for (let coin of coinArray1) {
-    console.log("coins");
     image(coin.coinImage, coin.x, coin.y, coin.width, coin.height);
   }
   //collectCoins(gridData1);
@@ -353,7 +398,6 @@ function levelTwo() {
   gravity(gridData2);
   mapTiles();
   for (let coin of coinArray2) {
-    console.log("coins");
     image(coin.coinImage, coin.x, coin.y, coin.width, coin.height);
   }
   //collectCoins(gridData2);
