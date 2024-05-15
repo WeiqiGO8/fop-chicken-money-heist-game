@@ -14,7 +14,7 @@ let enemyCharacter;
 function preload() {
   firstLevelBackground = loadImage("img/level-01.png");
   secondLevelBackground = loadImage("img/level-02.png");
-  mainCharacter = loadImage("img/chickenPixel.png");
+  mainCharacter = loadImage("img/chickenpixel.png");
   //enemyCharacter = loadImage("img/henPixel.png");
   coinImage = loadImage("img/coin.png");
 }
