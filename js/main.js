@@ -298,6 +298,11 @@ function numberInfo() {
 
   text(timer, 88, 65);
   text(Math.floor(velocity), 88, 106);
+  if (state === "levelOne") {
+    text(coinArray1.length, 88, 145);
+  } else if (state === "levelTwo") {
+    text(coinArray2.length, 88, 145);
+  }
   pop();
 }
 
@@ -349,7 +354,6 @@ function mouseClicked() {
     state === "loss"
   ) {
     state = "levelOne";
-    levelOne();
     // reset character position
   } else if (
     (levelTwoButton.hitTest(mouseX, mouseY) && state === "start") ||
@@ -357,7 +361,6 @@ function mouseClicked() {
     state === "loss"
   ) {
     state = "levelTwo";
-    levelTwo();
     // reset character position
   }
 }
@@ -393,7 +396,6 @@ function levelTwo() {
     coordinates.height
   );
   //image(enemyCharacter,x,y,w)
-  numberInfo();
   chicken(chickenX, chickenY);
   movement();
   gravity(gridData2);
@@ -401,6 +403,7 @@ function levelTwo() {
   for (let coin of coinArray2) {
     image(coin.coinImage, coin.x, coin.y, coin.width, coin.height);
   }
+  numberInfo();
   //collectCoins(gridData2);
 }
 
