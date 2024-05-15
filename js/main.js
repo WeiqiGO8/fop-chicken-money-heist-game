@@ -6,6 +6,7 @@ import { TextBox } from "./textbox.js";
 let firstLevelBackground;
 let secondLevelBackground;
 let coinImage;
+let mainCharacter;
 let enemyCharacter;
 
 // load images - variable = loadImage("file-path");
@@ -25,7 +26,6 @@ let state = "start";
 let timer = 18;
 
 //Main character variables
-let mainCharacter;
 let chickenY = 560;
 let chickenX = 0;
 let speed = 0;
