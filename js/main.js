@@ -22,7 +22,7 @@ function preload() {
 window.preload = preload;
 
 //variables
-let state = "win";
+let state = "start";
 let timer = 30;
 
 //Main character variables
@@ -350,10 +350,21 @@ function numberInfo() {
 
   text(timer, 88, 65);
   text(Math.floor(velocity), 88, 106);
+
+  let coinCounter = 0;
   if (state === "levelOne") {
-    text(coinArray1.length, 88, 145);
+    for (let coinIndex = 0; coinIndex < gridData1.length; coinIndex++) {
+      if (gridData1[coinIndex] === 3) {
+        coinCounter++;
+      }
+    }
   } else if (state === "levelTwo") {
-    text(coinArray2.length, 88, 145);
+    for (let coinIndex = 0; coinIndex < gridData2.length; coinIndex++) {
+      if (gridData2[coinIndex] === 3) {
+        coinCounter++;
+      }
+    }
+    text(coinCounter, 88, 145);
   }
   pop();
 }
