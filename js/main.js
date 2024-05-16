@@ -29,8 +29,9 @@ let jump = false;
 let direction = 1;
 let velocity = 5;
 let jumpPower = 10;
+let maxJumps = 2;
 let fallingSpeed = 1;
-let acceleration = 2;
+let acceleration = 5;
 let jumpCounter = 0;
 
 // load images - variable = loadImage("file-path");
@@ -151,7 +152,6 @@ function coordinatePointer() {
   line(0, mouseY, width, mouseY);
 }
 
-
 // The following function was adapted from:
 // https://stackoverflow.com/questions/35973441/how-to-horizontally-flip-an-image - 2024-05-13
 
@@ -160,7 +160,8 @@ let isFlipped = false;
 function flipChicken(mainCharacter, x, y) {
   push();
   clear();
-  if (state === "levelOne") { // Solve issue with background being redrawn.
+  if (state === "levelOne") {
+    // Solve issue with background being redrawn.
     image(
       firstLevelBackground,
       coordinates.x,
@@ -206,9 +207,13 @@ function movement() {
     }
   }
 
-  if (keyCode === arrowKey.spacebarKey || keyCode === arrowKey.upArrow) {
+  if (
+    (jumpCounter < maxJumps && keyCode === arrowKey.spacebarKey) ||
+    keyCode === arrowKey.upArrow
+  ) {
     jump = true;
   }
+
   flipChicken(mainCharacter, chickenX, chickenY);
 }
 
@@ -245,38 +250,71 @@ function gravity(gridData) {
     if (!jump) {
       velocity = 0;
       jumpCounter = 0;
-    } else if (jumpCounter < jumpPower) {
+    } else if (jumpCounter < maxJumps) {
       velocity -= jumpPower;
       jumpCounter++;
+      console.log(false);
     } else {
       velocity = 0;
       jumpCounter = 0;
       jump = false;
     }
-  } else {
-    if (!onPlatform) {
-      velocity = fallingSpeed + acceleration;
-    }
   }
 
-  if (jump === true && jumpCounter < jumpPower) {
-    velocity -= jumpPower - 0.3;
+  if (!onPlatform) {
+    velocity += fallingSpeed;
+  } else if (jump && jumpCounter < maxJumps) {
+    console.log(jumpCounter);
+    velocity -= jumpPower;
     jumpCounter++;
+  } else {
+    jump = false;
+    velocity = 0;
   }
 
   // Update the chicken's position
   chickenY += direction * velocity;
 
-  // Ensure the chicken stays within the canvas boundaries
+  // Edges of the canvas
   chickenY = constrain(chickenY, 0, height - chickenHeight);
+  chickenX = constrain(chickenX, 0, width - chickenWidth);
 }
 
-/*function collectCoins(gridData) {
+/*let coinCollected = false;
+function collectCoins(gridData) {
+  tileSize = 40;
+  gridX = floor(chickenX / tileSize);
+  gridY = floor((chickenY + chickenHeight) / tileSize);
+
   if (
     gridY < gridData.length &&
     gridX < gridData[gridY].length &&
     gridData[gridY][gridX] === 3
   ) {
+    coinCollected = true;
+  }
+
+  if (coinCollected) {
+    this.coinImage.remove();
+  }
+}*/
+
+/*let coinCollected = false;
+function collectCoins(gridData) {
+  tileSize = 40;
+  gridX = floor(chickenX / tileSize);
+  gridY = floor((chickenY + chickenHeight) / tileSize);
+
+  if (
+    gridY < gridData.length &&
+    gridX < gridData[gridY].length &&
+    gridData[gridY][gridX] === 3
+  ) {
+    coinCollected = true;
+  }
+
+  if (coinCollected) {
+    this.coinImage.remove();
   }
 }*/
 
@@ -362,8 +400,12 @@ function mouseClicked() {
 }
 window.mouseClicked = mouseClicked;
 
+//let startpositionY1 = 560;
+//let startpositionX1 = 0;
+
 function levelOne() {
-  //image(variable, x, y, width, height);
+  //chickenX = startpositionX1;
+  //chickenY = startpositionY1;
   image(
     firstLevelBackground,
     coordinates.x,
@@ -382,8 +424,12 @@ function levelOne() {
   //collectCoins(gridData1);
 }
 
-//chickenY = 320;
+//let startpositionY2 = 320;
+//let startpositionX2 = 0;
+
 function levelTwo() {
+  //chickenX = startpositionX2;
+  //chickenY = startpositionY2;
   image(
     secondLevelBackground,
     coordinates.x,
@@ -414,6 +460,7 @@ function draw() {
   } else if (state === "resultScreen") {
     resultScreen();
   }
+
   coordinatePointer(); // makes the exact coordinates of the canvas visible with mouse
 }
 
