@@ -1,28 +1,36 @@
-//Imports
-//import { Platform, platformArray } from "../js/level-1.js";
-import { gridData1 } from "../js/tiles.js";
-import { gridData2 } from "../js/tiles.js";
-//import { PlatformTwo, platformTwoArray } from "../js/level-2.js";
-import { Button } from "../js/button.js";
-import { TextBox } from "../js/textbox.js";
-import { mapTiles } from "../js/tiles.js";
+import { mapTiles, gridData1, gridData2 } from "./tiles.js";
+import { Button } from "./button.js";
+import { TextBox } from "./textbox.js";
 
-// global variable for the background:
+// global variable for the images:
 let firstLevelBackground;
 let secondLevelBackground;
 let coinImage;
-let state = "startScreen";
+let mainCharacter;
+let enemyCharacter;
+
+// load images - variable = loadImage("file-path");
+// preload images --> loadimage - variable = loadImage("file-path");
+// use img --> image(variable, x, y, width, height);
+function preload() {
+  firstLevelBackground = loadImage("img/level-01.png");
+  secondLevelBackground = loadImage("img/level-02.png");
+  mainCharacter = loadImage("img/chickenpixel.png");
+  //enemyCharacter = loadImage("img/henPixel.png");
+  coinImage = loadImage("img/coin.png");
+}
+window.preload = preload;
+
+//variables
+let state = "start";
 let timer = 18;
 
 //Main character variables
-let mainCharacter;
 let chickenY = 560;
 let chickenX = 0;
 let speed = 0;
 const chickenWidth = 40;
 const chickenHeight = 40;
-
-let enemyCharacter;
 
 //Gravity variables
 let jump = false;
@@ -33,18 +41,6 @@ let maxJumps = 2;
 let fallingSpeed = 1;
 let acceleration = 5;
 let jumpCounter = 0;
-
-// load images - variable = loadImage("file-path");
-// preload images --> loadimage - variable = loadImage("file-path");
-// use img --> image(variable, x, y, width, height);
-function preload() {
-  firstLevelBackground = loadImage("img/level-01.png");
-  secondLevelBackground = loadImage("img/level-02.png");
-  mainCharacter = loadImage("img/chickenPixel.png");
-  //enemyCharacter = loadImage("img/henPixel.png");
-  coinImage = loadImage("img/coin.png");
-}
-window.preload = preload;
 
 // objects
 const arrowKey = {
@@ -112,25 +108,6 @@ function setup() {
   ];
 }
 window.setup = setup;
-
-function numberInfo() {
-  // the following 2 lines of code was adapted from: https://editor.p5js.org/marynotari/sketches/S1T2ZTMp- - 2024-05-06
-  // if (frameCount % 60 === 0 && timer > 0) {
-  //   timer--;
-
-  push();
-  fill(0, 0, 0);
-  text("time", 4, 65);
-  text("velocity", 4, 106);
-
-  text(timer, 88, 65);
-  text(Math.floor(velocity), 88, 106);
-  pop();
-}
-if (timer === 0) {
-  let timerText = new TextBox("Game Over!", 30, 20);
-}
-// }
 
 function chicken(chickenX, chickenY) {
   image(mainCharacter, chickenX, chickenY, chickenWidth, chickenHeight);
@@ -321,7 +298,7 @@ function collectCoins(gridData) {
 window.keyReleased = keyReleased;
 
 function startScreen() {
-  if (state === "startScreen") {
+  if (state === "start") {
     image(
       firstLevelBackground,
       coordinates.x,
@@ -343,7 +320,30 @@ function startScreen() {
   }
 }
 
-//! Not working yet ------------------------------------------------------------
+function numberInfo() {
+  // the following 2 lines of code was adapted from: https://editor.p5js.org/marynotari/sketches/S1T2ZTMp- - 2024-05-06
+  if (frameCount % 30 === 0 && timer > 0) {
+    timer--;
+  }
+  if (timer === 0) {
+    state = "loss";
+  }
+  push();
+  fill(0, 0, 0);
+  text("time", 4, 65);
+  text("velocity", 4, 106);
+  text("coins", 4, 145);
+
+  text(timer, 88, 65);
+  text(Math.floor(velocity), 88, 106);
+  if (state === "levelOne") {
+    text(coinArray1.length, 88, 145);
+  } else if (state === "levelTwo") {
+    text(coinArray2.length, 88, 145);
+  }
+  pop();
+}
+
 function resultScreen() {
   if (state === "win") {
     image(
@@ -361,6 +361,7 @@ function resultScreen() {
     winLoss.draw();
     levelOneButton.draw();
     levelTwoButton.draw();
+    mapTiles();
   } else if (state === "loss") {
     image(
       secondLevelBackground,
@@ -385,16 +386,19 @@ function mouseClicked() {
   let levelOneButton = new Button(40, 440, 200, 40, "Level 1");
   let levelTwoButton = new Button(320, 440, 200, 40, "Level 2");
 
-  if (levelOneButton.hitTest(mouseX, mouseY) && state === "startScreen") {
+  if (
+    (levelOneButton.hitTest(mouseX, mouseY) && state === "start") ||
+    state === "win" ||
+    state === "loss"
+  ) {
     state = "levelOne";
-    levelOne();
     // reset character position
   } else if (
-    levelTwoButton.hitTest(mouseX, mouseY) &&
-    state === "startScreen"
+    (levelTwoButton.hitTest(mouseX, mouseY) && state === "start") ||
+    state === "win" ||
+    state === "loss"
   ) {
     state = "levelTwo";
-    levelTwo();
     // reset character position
   }
 }
@@ -413,7 +417,6 @@ function levelOne() {
     coordinates.width,
     coordinates.height
   );
-  numberInfo();
   chicken(chickenX, chickenY);
   movement();
   gravity(gridData1);
@@ -421,6 +424,7 @@ function levelOne() {
   for (let coin of coinArray1) {
     image(coin.coinImage, coin.x, coin.y, coin.width, coin.height);
   }
+  numberInfo();
   //collectCoins(gridData1);
 }
 
@@ -438,7 +442,6 @@ function levelTwo() {
     coordinates.height
   );
   //image(enemyCharacter,x,y,w)
-  numberInfo();
   chicken(chickenX, chickenY);
   movement();
   gravity(gridData2);
@@ -446,18 +449,21 @@ function levelTwo() {
   for (let coin of coinArray2) {
     image(coin.coinImage, coin.x, coin.y, coin.width, coin.height);
   }
+  numberInfo();
   //collectCoins(gridData2);
 }
 
 function draw() {
   clear();
-  if (state === "startScreen") {
+  if (state === "start") {
     startScreen();
   } else if (state === "levelOne") {
     levelOne();
   } else if (state === "levelTwo") {
     levelTwo();
-  } else if (state === "resultScreen") {
+  } else if (state === "win") {
+    resultScreen();
+  } else if (state === "loss") {
     resultScreen();
   }
 

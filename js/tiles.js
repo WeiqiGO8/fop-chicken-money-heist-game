@@ -38,8 +38,6 @@ function mapTiles() {
   }
 }
 
-export { mapTiles };
-
 //https://app.codegpt.co/en/marketplace/agents/agent-c27c7955
 
 const gridData1 = [
@@ -64,8 +62,6 @@ const gridData1 = [
   [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
 ]
 
-export { gridData1 };
-
 const gridData2 = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0],
@@ -88,6 +84,6 @@ const gridData2 = [
   [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
 ]
 
-export { gridData2 };
+export { mapTiles, gridData1, gridData2 };
 
 
