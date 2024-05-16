@@ -23,7 +23,7 @@ window.preload = preload;
 
 //variables
 let state = "start";
-let timer = 18;
+let timer = 30;
 
 //Main character variables
 let chickenY = 560;
@@ -347,7 +347,7 @@ function numberInfo() {
 function resultScreen() {
   if (state === "win") {
     image(
-      firstLevelBackground,
+      secondLevelBackground,
       coordinates.x,
       coordinates.y,
       coordinates.width,
@@ -364,7 +364,7 @@ function resultScreen() {
     mapTiles();
   } else if (state === "loss") {
     image(
-      secondLevelBackground,
+      firstLevelBackground,
       coordinates.x,
       coordinates.y,
       coordinates.width,
@@ -391,6 +391,7 @@ function mouseClicked() {
     state === "win" ||
     state === "loss"
   ) {
+    timer = 30;
     state = "levelOne";
     // reset character position
   } else if (
@@ -398,6 +399,7 @@ function mouseClicked() {
     state === "win" ||
     state === "loss"
   ) {
+    timer = 30;
     state = "levelTwo";
     // reset character position
   }
@@ -461,9 +463,7 @@ function draw() {
     levelOne();
   } else if (state === "levelTwo") {
     levelTwo();
-  } else if (state === "win") {
-    resultScreen();
-  } else if (state === "loss") {
+  } else if (state === "win" || state === "loss") {
     resultScreen();
   }
 
