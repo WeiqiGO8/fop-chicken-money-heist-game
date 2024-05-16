@@ -36,10 +36,10 @@ const chickenHeight = 40;
 let jump = false;
 let direction = 1;
 let velocity = 5;
-let jumpPower = 10;
+let jumpPower = 15;
 let maxJumps = 2;
 let fallingSpeed = 1;
-let acceleration = 5;
+let acceleration = 0.3;
 let jumpCounter = 0;
 
 // objects
@@ -184,14 +184,20 @@ function movement() {
     }
   }
 
+  flipChicken(mainCharacter, chickenX, chickenY);
+}
+
+
+// Was advised during the lab session to add the keyPressed function to help with some movement issues. 16-05-2024
+function keyPressed() {
   if (
     (jumpCounter < maxJumps && keyCode === arrowKey.spacebarKey) ||
     keyCode === arrowKey.upArrow
   ) {
-    jump = true;
+    if (!jump) {
+      jump = true;
+    }
   }
-
-  flipChicken(mainCharacter, chickenX, chickenY);
 }
 
 //Reset
@@ -224,29 +230,16 @@ function gravity(gridData) {
   }
 
   if (onPlatform) {
-    if (!jump) {
-      velocity = 0;
-      jumpCounter = 0;
-    } else if (jumpCounter < maxJumps) {
-      velocity -= jumpPower;
-      jumpCounter++;
-      console.log(false);
-    } else {
-      velocity = 0;
-      jumpCounter = 0;
-      jump = false;
-    }
+    velocity = 0;
+    jumpCounter = 0;
+  } else {
+    velocity += fallingSpeed * acceleration;
   }
 
-  if (!onPlatform) {
-    velocity += fallingSpeed;
-  } else if (jump && jumpCounter < maxJumps) {
-    console.log(jumpCounter);
-    velocity -= jumpPower;
+  if (jump && jumpCounter < maxJumps) {
+    velocity = -jumpPower;
     jumpCounter++;
-  } else {
     jump = false;
-    velocity = 0;
   }
 
   // Update the chicken's position
@@ -255,6 +248,11 @@ function gravity(gridData) {
   // Edges of the canvas
   chickenY = constrain(chickenY, 0, height - chickenHeight);
   chickenX = constrain(chickenX, 0, width - chickenWidth);
+
+  // Check if chicken is falling below the platform
+  if (!onPlatform) {
+    velocity += fallingSpeed;
+  }
 }
 
 /*let coinCollected = false;
@@ -295,6 +293,7 @@ function collectCoins(gridData) {
   }
 }*/
 
+window.keyPressed = keyPressed;
 window.keyReleased = keyReleased;
 
 function startScreen() {
@@ -471,3 +470,53 @@ function draw() {
 }
 
 window.draw = draw;
+
+
+//old gravity function incase i need it
+//Gravity & Jumping
+/*function gravity(gridData) {
+  let onPlatform = false;
+  const tileSize = 40;
+  const gridX = floor(chickenX / tileSize);
+  const gridY = floor((chickenY + chickenHeight) / tileSize);
+
+  // Platform collision
+  if (
+    gridY < gridData.length &&
+    gridX < gridData[gridY].length &&
+    gridData[gridY][gridX] === 1
+  ) {
+    onPlatform = true;
+  }
+
+  if (onPlatform) {
+    if (!jump) {
+      velocity = 0;
+      jumpCounter = 0;
+    } else if (jumpCounter < maxJumps) {
+      velocity -= jumpPower;
+      jumpCounter++;
+    } else {
+      velocity = 0;
+      jumpCounter = 0;
+      jump = false;
+    }
+  } else if (!onPlatform) {
+    velocity += fallingSpeed;
+  }
+
+  if (jump && jumpCounter < maxJumps) {
+    velocity -= jumpPower;
+    jumpCounter++;
+  } else if (jump && !onPlatform) {
+    velocity = 0;
+    velocity += fallingSpeed;
+  }
+
+  // Update the chicken's position
+  chickenY += direction * velocity;
+
+  // Edges of the canvas
+  chickenY = constrain(chickenY, 0, height - chickenHeight);
+  chickenX = constrain(chickenX, 0, width - chickenWidth);
+}*/
