@@ -22,8 +22,8 @@ function preload() {
 window.preload = preload;
 
 //variables
-let state = "start";
-let timer = 18;
+let state = "win";
+let timer = 30;
 
 //Main character variables
 let chickenY = 560;
@@ -346,7 +346,7 @@ function numberInfo() {
 function resultScreen() {
   if (state === "win") {
     image(
-      firstLevelBackground,
+      secondLevelBackground,
       coordinates.x,
       coordinates.y,
       coordinates.width,
@@ -363,7 +363,7 @@ function resultScreen() {
     mapTiles();
   } else if (state === "loss") {
     image(
-      secondLevelBackground,
+      firstLevelBackground,
       coordinates.x,
       coordinates.y,
       coordinates.width,
@@ -387,16 +387,18 @@ function mouseClicked() {
 
   if (
     (levelOneButton.hitTest(mouseX, mouseY) && state === "start") ||
-    state === "win" ||
-    state === "loss"
+    (levelOneButton.hitTest(mouseX, mouseY) && state === "win") ||
+    (levelOneButton.hitTest(mouseX, mouseY) && state === "loss")
   ) {
+    timer = 30;
     state = "levelOne";
     // reset character position
   } else if (
     (levelTwoButton.hitTest(mouseX, mouseY) && state === "start") ||
-    state === "win" ||
-    state === "loss"
+    (levelTwoButton.hitTest(mouseX, mouseY) && state === "win") ||
+    (levelTwoButton.hitTest(mouseX, mouseY) && state === "loss")
   ) {
+    timer = 30;
     state = "levelTwo";
     // reset character position
   }
@@ -460,9 +462,7 @@ function draw() {
     levelOne();
   } else if (state === "levelTwo") {
     levelTwo();
-  } else if (state === "win") {
-    resultScreen();
-  } else if (state === "loss") {
+  } else if (state === "win" || state === "loss") {
     resultScreen();
   }
 
