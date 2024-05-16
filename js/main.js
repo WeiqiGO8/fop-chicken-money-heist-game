@@ -187,7 +187,6 @@ function movement() {
   flipChicken(mainCharacter, chickenX, chickenY);
 }
 
-
 // Was advised during the lab session to add the keyPressed function to help with some movement issues. 16-05-2024
 function keyPressed() {
   if (
@@ -212,6 +211,8 @@ function keyReleased() {
 
 //https://chat.openai.com/share/28fefe10-0739-4420-8a4c-10edff61a6a8 - 28-04-2024
 //
+// Adjusting platform detection to only the top of the tile, not using the horizontal movement code.
+// https://chat.openai.com/share/c164b996-7fff-494f-bc73-7e127d1b5ae1 -16-05-2024
 
 //Gravity & Jumping
 function gravity(gridData) {
@@ -224,6 +225,20 @@ function gravity(gridData) {
   if (
     gridY < gridData.length &&
     gridX < gridData[gridY].length &&
+    gridData[gridY][gridX] === 1 &&
+    chickenY + chickenHeight <= gridY * tileSize + velocity
+  ) {
+    onPlatform = true;
+    chickenY = gridY * tileSize - chickenHeight; // Position chicken on top of the tile
+    velocity = 0;
+    jumpCounter = 0;
+  } else {
+    velocity += fallingSpeed * acceleration;
+    onPlatform = false;
+  }
+  /*if (
+    gridY < gridData.length &&
+    gridX < gridData[gridY].length &&
     gridData[gridY][gridX] === 1
   ) {
     onPlatform = true;
@@ -234,7 +249,7 @@ function gravity(gridData) {
     jumpCounter = 0;
   } else {
     velocity += fallingSpeed * acceleration;
-  }
+  }*/
 
   if (jump && jumpCounter < maxJumps) {
     velocity = -jumpPower;
@@ -470,7 +485,6 @@ function draw() {
 }
 
 window.draw = draw;
-
 
 //old gravity function incase i need it
 //Gravity & Jumping
