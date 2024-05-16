@@ -22,7 +22,7 @@ function preload() {
 window.preload = preload;
 
 //variables
-let state = "start";
+let state = "win";
 let timer = 30;
 
 //Main character variables
@@ -388,16 +388,16 @@ function mouseClicked() {
 
   if (
     (levelOneButton.hitTest(mouseX, mouseY) && state === "start") ||
-    state === "win" ||
-    state === "loss"
+    (levelOneButton.hitTest(mouseX, mouseY) && state === "win") ||
+    (levelOneButton.hitTest(mouseX, mouseY) && state === "loss")
   ) {
     timer = 30;
     state = "levelOne";
     // reset character position
   } else if (
     (levelTwoButton.hitTest(mouseX, mouseY) && state === "start") ||
-    state === "win" ||
-    state === "loss"
+    (levelTwoButton.hitTest(mouseX, mouseY) && state === "win") ||
+    (levelTwoButton.hitTest(mouseX, mouseY) && state === "loss")
   ) {
     timer = 30;
     state = "levelTwo";
