@@ -9,6 +9,8 @@ let coinImage;
 let mainCharacter;
 let enemyCharacter;
 
+let coinCounter = 0;
+
 // load images - variable = loadImage("file-path");
 // preload images --> loadimage - variable = loadImage("file-path");
 // use img --> image(variable, x, y, width, height);
@@ -270,43 +272,24 @@ function gravity(gridData) {
   }
 }
 
-/*let coinCollected = false;
-function collectCoins(gridData) {
-  tileSize = 40;
-  gridX = floor(chickenX / tileSize);
-  gridY = floor((chickenY + chickenHeight) / tileSize);
+function collectCoins(coinArray) {
 
-  if (
-    gridY < gridData.length &&
-    gridX < gridData[gridY].length &&
-    gridData[gridY][gridX] === 3
-  ) {
-    coinCollected = true;
+  for (let index = coinArray.length - 1; index > -1; --index) {
+    let coin = coinArray[index];
+    if (
+      chickenX < coin.x + coin.width &&
+      chickenX + chickenWidth > coin.x &&
+      chickenY < coin.y + coin.height &&
+      chickenY + chickenHeight > coin.y
+    ) {
+      {
+        coinArray.splice(index, 1);
+        coinCounter++;
+      }
+    }
   }
-
-  if (coinCollected) {
-    this.coinImage.remove();
-  }
-}*/
-
-/*let coinCollected = false;
-function collectCoins(gridData) {
-  tileSize = 40;
-  gridX = floor(chickenX / tileSize);
-  gridY = floor((chickenY + chickenHeight) / tileSize);
-
-  if (
-    gridY < gridData.length &&
-    gridX < gridData[gridY].length &&
-    gridData[gridY][gridX] === 3
-  ) {
-    coinCollected = true;
-  }
-
-  if (coinCollected) {
-    this.coinImage.remove();
-  }
-}*/
+  text(coinCounter, 88, 145);
+}
 
 window.keyPressed = keyPressed;
 window.keyReleased = keyReleased;
@@ -351,7 +334,6 @@ function numberInfo() {
   text(timer, 88, 65);
   text(Math.floor(velocity), 88, 106);
 
-  let coinCounter = 0;
   if (state === "levelOne") {
     for (let coinIndex = 0; coinIndex < gridData1.length; coinIndex++) {
       if (gridData1[coinIndex] === 3) {
@@ -452,7 +434,7 @@ function levelOne() {
     image(coin.coinImage, coin.x, coin.y, coin.width, coin.height);
   }
   numberInfo();
-  //collectCoins(gridData1);
+  collectCoins(coinArray1);
 }
 
 //let startpositionY2 = 320;
@@ -477,7 +459,7 @@ function levelTwo() {
     image(coin.coinImage, coin.x, coin.y, coin.width, coin.height);
   }
   numberInfo();
-  //collectCoins(gridData2);
+  collectCoins(coinArray2);
 }
 
 function draw() {
@@ -496,52 +478,3 @@ function draw() {
 }
 
 window.draw = draw;
-
-//old gravity function incase i need it
-//Gravity & Jumping
-/*function gravity(gridData) {
-  let onPlatform = false;
-  const tileSize = 40;
-  const gridX = floor(chickenX / tileSize);
-  const gridY = floor((chickenY + chickenHeight) / tileSize);
-
-  // Platform collision
-  if (
-    gridY < gridData.length &&
-    gridX < gridData[gridY].length &&
-    gridData[gridY][gridX] === 1
-  ) {
-    onPlatform = true;
-  }
-
-  if (onPlatform) {
-    if (!jump) {
-      velocity = 0;
-      jumpCounter = 0;
-    } else if (jumpCounter < maxJumps) {
-      velocity -= jumpPower;
-      jumpCounter++;
-    } else {
-      velocity = 0;
-      jumpCounter = 0;
-      jump = false;
-    }
-  } else if (!onPlatform) {
-    velocity += fallingSpeed;
-  }
-
-  if (jump && jumpCounter < maxJumps) {
-    velocity -= jumpPower;
-    jumpCounter++;
-  } else if (jump && !onPlatform) {
-    velocity = 0;
-    velocity += fallingSpeed;
-  }
-
-  // Update the chicken's position
-  chickenY += direction * velocity;
-
-  // Edges of the canvas
-  chickenY = constrain(chickenY, 0, height - chickenHeight);
-  chickenX = constrain(chickenX, 0, width - chickenWidth);
-}*/
