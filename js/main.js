@@ -273,7 +273,6 @@ function gravity(gridData) {
 }
 
 function collectCoins(coinArray) {
-
   for (let index = coinArray.length - 1; index > -1; --index) {
     let coin = coinArray[index];
     if (
@@ -435,6 +434,9 @@ function levelOne() {
   }
   numberInfo();
   collectCoins(coinArray1);
+  if (coinCounter === 8) {
+    state = "win";
+  }
 }
 
 //let startpositionY2 = 320;
@@ -460,6 +462,9 @@ function levelTwo() {
   }
   numberInfo();
   collectCoins(coinArray2);
+  if (coinCounter === 5) {
+    state = "win";
+  }
 }
 
 function draw() {
