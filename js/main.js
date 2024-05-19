@@ -9,8 +9,6 @@ let coinImage;
 let mainCharacter;
 let enemyCharacter;
 
-let coinCounter = 0;
-
 // load images - variable = loadImage("file-path");
 // preload images --> loadimage - variable = loadImage("file-path");
 // use img --> image(variable, x, y, width, height);
@@ -140,7 +138,6 @@ function flipChicken(mainCharacter, x, y) {
   push();
   clear();
   if (state === "levelOne") {
-    // Solve issue with background being redrawn.
     image(
       firstLevelBackground,
       coordinates.x,
@@ -220,7 +217,7 @@ function keyReleased() {
 function gravity(gridData) {
   let onPlatform = false;
   const tileSize = 40;
-  const gridX = floor(chickenX / tileSize);
+  const gridX = floor((chickenX + chickenWidth) / tileSize);
   const gridY = floor((chickenY + chickenHeight) / tileSize);
 
   // Platform collision
@@ -238,20 +235,6 @@ function gravity(gridData) {
     velocity += fallingSpeed * acceleration;
     onPlatform = false;
   }
-  /*if (
-    gridY < gridData.length &&
-    gridX < gridData[gridY].length &&
-    gridData[gridY][gridX] === 1
-  ) {
-    onPlatform = true;
-  }
-
-  if (onPlatform) {
-    velocity = 0;
-    jumpCounter = 0;
-  } else {
-    velocity += fallingSpeed * acceleration;
-  }*/
 
   if (jump && jumpCounter < maxJumps) {
     velocity = -jumpPower;
@@ -272,6 +255,7 @@ function gravity(gridData) {
   }
 }
 
+let coinCounter = 0;
 function collectCoins(coinArray) {
   for (let index = coinArray.length - 1; index > -1; --index) {
     let coin = coinArray[index];
@@ -443,6 +427,7 @@ function levelOne() {
 //let startpositionX2 = 0;
 
 function levelTwo() {
+  maxJumps = 3;
   //chickenX = startpositionX2;
   //chickenY = startpositionY2;
   image(
