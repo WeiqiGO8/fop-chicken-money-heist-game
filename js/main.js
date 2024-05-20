@@ -61,14 +61,6 @@ const coordinates = {
   height: 768,
 };
 
-/*const background = new Sprite({
-  position: {
-    x: 0,
-    y: 0,
-  },
-  imageSrc: "./img/level-1.png",
-});*/
-
 class Coin {
   constructor(coinImage, x, y, width, height) {
     this.coinImage = coinImage;
@@ -255,6 +247,10 @@ function gravity(gridData) {
   }
 }
 
+
+// Line 262 to 279 is adapted from the following scource.
+//https://www.youtube.com/watch?v=_sIm4LCiR0c timestamp: 13:09, 20-05-2024
+
 let coinCounter = 0;
 function collectCoins(coinArray) {
   for (let index = coinArray.length - 1; index > -1; --index) {
@@ -396,12 +392,7 @@ function mouseClicked() {
 }
 window.mouseClicked = mouseClicked;
 
-//let startpositionY1 = 560;
-//let startpositionX1 = 0;
-
 function levelOne() {
-  //chickenX = startpositionX1;
-  //chickenY = startpositionY1;
   image(
     firstLevelBackground,
     coordinates.x,
@@ -423,13 +414,8 @@ function levelOne() {
   }
 }
 
-//let startpositionY2 = 320;
-//let startpositionX2 = 0;
-
 function levelTwo() {
   maxJumps = 3;
-  //chickenX = startpositionX2;
-  //chickenY = startpositionY2;
   image(
     secondLevelBackground,
     coordinates.x,
