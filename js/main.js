@@ -75,12 +75,7 @@ class Coin {
 let coinArray1;
 let coinArray2;
 
-function setup() {
-  let canvas = createCanvas(1366, 768);
-  canvas.parent("canvas-holder");
-  background(255, 255, 255);
-  frameRate(30);
-
+function drawCoins() {
   coinArray1 = [
     new Coin(coinImage, 240, 200, 40, 40),
     new Coin(coinImage, 1040, 240, 40, 40),
@@ -99,6 +94,33 @@ function setup() {
     new Coin(coinImage, 200, 200, 40, 40),
     new Coin(coinImage, 600, 40, 40, 40),
   ];
+}
+
+function setup() {
+  let canvas = createCanvas(1366, 768);
+  canvas.parent("canvas-holder");
+  background(255, 255, 255);
+  frameRate(30);
+
+  /*coinArray1 = [
+    new Coin(coinImage, 240, 200, 40, 40),
+    new Coin(coinImage, 1040, 240, 40, 40),
+    new Coin(coinImage, 1320, 360, 40, 40),
+    new Coin(coinImage, 920, 520, 40, 40),
+    new Coin(coinImage, 80, 360, 40, 40),
+    new Coin(coinImage, 600, 320, 40, 40),
+    new Coin(coinImage, 760, 600, 40, 40),
+    new Coin(coinImage, 280, 520, 40, 40),
+  ];
+
+  coinArray2 = [
+    new Coin(coinImage, 1080, 40, 40, 40),
+    new Coin(coinImage, 200, 560, 40, 40),
+    new Coin(coinImage, 920, 360, 40, 40),
+    new Coin(coinImage, 200, 200, 40, 40),
+    new Coin(coinImage, 600, 40, 40, 40),
+  ];*/
+  drawCoins();
 }
 window.setup = setup;
 
@@ -248,7 +270,6 @@ function gravity(gridData) {
   }
 }
 
-
 // Line 262 to 279 is adapted from the following scource.
 //https://www.youtube.com/watch?v=_sIm4LCiR0c timestamp: 13:09, 20-05-2024
 
@@ -360,6 +381,7 @@ function mouseClicked() {
     chickenX = 0;
     chickenY = 560;
     state = "levelOne";
+    drawCoins();
     // reset character position
   } else if (levelTwoButton.hitTest(mouseX, mouseY) && state === "win") {
     timer = 30;
@@ -367,6 +389,7 @@ function mouseClicked() {
     chickenX = 40;
     chickenY = 320;
     state = "levelTwo";
+    drawCoins();
     // reset character position
   }
 }
