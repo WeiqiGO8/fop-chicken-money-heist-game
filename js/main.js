@@ -287,10 +287,10 @@ function startScreen() {
       coordinates.height
     );
 
-    let winLoss = new TextBox(80, 320, 400, 80, "Chicken Platform");
+    let winLoss = new TextBox(480, 320, 400, 80, "Chicken Platform");
 
-    let levelOneButton = new Button(40, 440, 200, 40, "Level 1");
-    let levelTwoButton = new Button(320, 440, 200, 40, "Level 2");
+    let levelOneButton = new Button(440, 440, 200, 40, "Level 1");
+    let levelTwoButton = new Button(720, 440, 200, 40, "Level 2");
 
     winLoss.draw();
     levelOneButton.draw();
@@ -317,20 +317,8 @@ function numberInfo() {
   text(timer, 88, 65);
   text(Math.floor(velocity), 88, 106);
 
-  if (state === "levelOne") {
-    for (let coinIndex = 0; coinIndex < gridData1.length; coinIndex++) {
-      if (gridData1[coinIndex] === 3) {
-        coinCounter++;
-      }
-    }
-  } else if (state === "levelTwo") {
-    for (let coinIndex = 0; coinIndex < gridData2.length; coinIndex++) {
-      if (gridData2[coinIndex] === 3) {
-        coinCounter++;
-      }
-    }
-    text(coinCounter, 88, 145);
-  }
+  fill(0, 0, 0);
+  text(coinCounter, 88, 145);
   pop();
 }
 
@@ -343,10 +331,10 @@ function resultScreen() {
       coordinates.width,
       coordinates.height
     );
-    let winLoss = new TextBox(80, 320, 400, 80, "You Won!");
+    let winLoss = new TextBox(480, 320, 400, 80, "You Won!");
 
-    let levelOneButton = new Button(40, 440, 200, 40, "Level 1");
-    let levelTwoButton = new Button(320, 440, 200, 40, "Level 2");
+    let levelOneButton = new Button(440, 440, 200, 40, "Level 1");
+    let levelTwoButton = new Button(720, 440, 200, 40, "Level 2");
 
     winLoss.draw();
     levelOneButton.draw();
@@ -360,10 +348,10 @@ function resultScreen() {
       coordinates.width,
       coordinates.height
     );
-    let winLoss = new TextBox(80, 320, 400, 80, "You Lost!");
+    let winLoss = new TextBox(480, 320, 400, 80, "You Lost!");
 
-    let levelOneButton = new Button(40, 440, 200, 40, "Level 1");
-    let levelTwoButton = new Button(320, 440, 200, 40, "Level 2");
+    let levelOneButton = new Button(440, 440, 200, 40, "Level 1");
+    let levelTwoButton = new Button(720, 440, 200, 40, "Level 2");
 
     winLoss.draw();
     levelOneButton.draw();
@@ -373,8 +361,8 @@ function resultScreen() {
 }
 
 function mouseClicked() {
-  let levelOneButton = new Button(40, 440, 200, 40, "Level 1");
-  let levelTwoButton = new Button(320, 440, 200, 40, "Level 2");
+  let levelOneButton = new Button(440, 440, 200, 40, "Level 1");
+  let levelTwoButton = new Button(720, 440, 200, 40, "Level 2");
 
   if (
     (levelOneButton.hitTest(mouseX, mouseY) && state === "start") ||
@@ -382,6 +370,9 @@ function mouseClicked() {
     (levelOneButton.hitTest(mouseX, mouseY) && state === "loss")
   ) {
     timer = 30;
+    coinCounter = 0;
+    chickenX = 0;
+    chickenY = 560;
     state = "levelOne";
     // reset character position
   } else if (
@@ -390,6 +381,9 @@ function mouseClicked() {
     (levelTwoButton.hitTest(mouseX, mouseY) && state === "loss")
   ) {
     timer = 30;
+    coinCounter = 0;
+    chickenX = 40;
+    chickenY = 320;
     state = "levelTwo";
     // reset character position
   }
