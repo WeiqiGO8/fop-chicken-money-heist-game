@@ -1,8 +1,8 @@
 import { mapTiles, gridData1, gridData2 } from "./tiles.js";
 import { Button } from "./button.js";
-import { TextBox } from "./textbox.js";
 
 // global variable for the images:
+let screenBackground;
 let firstLevelBackground;
 let secondLevelBackground;
 let coinImage;
@@ -13,6 +13,7 @@ let enemyCharacter;
 // preload images --> loadimage - variable = loadImage("file-path");
 // use img --> image(variable, x, y, width, height);
 function preload() {
+  screenBackground = loadImage("img/screenbackground.png");
   firstLevelBackground = loadImage("img/level-01.png");
   secondLevelBackground = loadImage("img/level-02.png");
   mainCharacter = loadImage("img/chickenpixel.png");
@@ -280,21 +281,18 @@ window.keyReleased = keyReleased;
 function startScreen() {
   if (state === "start") {
     image(
-      firstLevelBackground,
+      screenBackground,
       coordinates.x,
       coordinates.y,
       coordinates.width,
       coordinates.height
     );
 
-    let winLoss = new TextBox(480, 320, 400, 80, "Chicken Platform");
-
-    let levelOneButton = new Button(440, 440, 200, 40, "Level 1");
-    let levelTwoButton = new Button(720, 440, 200, 40, "Level 2");
+    let winLoss = new Button(480, 320, 400, 80, "Chicken Platform");
+    let startLevelOneButton = new Button(560, 440, 240, 40, "Level 1");
 
     winLoss.draw();
-    levelOneButton.draw();
-    levelTwoButton.draw();
+    startLevelOneButton.draw();
 
     mapTiles();
   }
@@ -323,15 +321,16 @@ function numberInfo() {
 }
 
 function resultScreen() {
+  image(
+    screenBackground,
+    coordinates.x,
+    coordinates.y,
+    coordinates.width,
+    coordinates.height
+  );
+
   if (state === "win") {
-    image(
-      secondLevelBackground,
-      coordinates.x,
-      coordinates.y,
-      coordinates.width,
-      coordinates.height
-    );
-    let winLoss = new TextBox(480, 320, 400, 80, "You Won!");
+    let winLoss = new Button(480, 320, 400, 80, "You Won!");
 
     let levelOneButton = new Button(440, 440, 200, 40, "Level 1");
     let levelTwoButton = new Button(720, 440, 200, 40, "Level 2");
@@ -341,33 +340,24 @@ function resultScreen() {
     levelTwoButton.draw();
     mapTiles();
   } else if (state === "loss") {
-    image(
-      firstLevelBackground,
-      coordinates.x,
-      coordinates.y,
-      coordinates.width,
-      coordinates.height
-    );
-    let winLoss = new TextBox(480, 320, 400, 80, "You Lost!");
-
-    let levelOneButton = new Button(440, 440, 200, 40, "Level 1");
-    let levelTwoButton = new Button(720, 440, 200, 40, "Level 2");
+    let winLoss = new Button(480, 320, 400, 80, "You Lost!");
+    let startLevelOneButton = new Button(560, 440, 240, 40, "Level 1");
 
     winLoss.draw();
-    levelOneButton.draw();
-    levelTwoButton.draw();
+    startLevelOneButton.draw();
     mapTiles();
   }
 }
 
 function mouseClicked() {
+  let startLevelOneButton = new Button(560, 440, 240, 40, "Level 1");
   let levelOneButton = new Button(440, 440, 200, 40, "Level 1");
   let levelTwoButton = new Button(720, 440, 200, 40, "Level 2");
 
   if (
-    (levelOneButton.hitTest(mouseX, mouseY) && state === "start") ||
-    (levelOneButton.hitTest(mouseX, mouseY) && state === "win") ||
-    (levelOneButton.hitTest(mouseX, mouseY) && state === "loss")
+    (startLevelOneButton.hitTest(mouseX, mouseY) && state === "start") ||
+    (startLevelOneButton.hitTest(mouseX, mouseY) && state === "loss") ||
+    (levelOneButton.hitTest(mouseX, mouseY) && state === "win")
   ) {
     timer = 30;
     coinCounter = 0;
@@ -375,11 +365,7 @@ function mouseClicked() {
     chickenY = 560;
     state = "levelOne";
     // reset character position
-  } else if (
-    (levelTwoButton.hitTest(mouseX, mouseY) && state === "start") ||
-    (levelTwoButton.hitTest(mouseX, mouseY) && state === "win") ||
-    (levelTwoButton.hitTest(mouseX, mouseY) && state === "loss")
-  ) {
+  } else if (levelTwoButton.hitTest(mouseX, mouseY) && state === "win") {
     timer = 30;
     coinCounter = 0;
     chickenX = 40;
