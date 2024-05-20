@@ -7,11 +7,10 @@ let firstLevelBackground;
 let secondLevelBackground;
 let coinImage;
 let mainCharacter;
-let enemyCharacter;
+let coinArray1;
+let coinArray2;
+// let enemyCharacter;
 
-// load images - variable = loadImage("file-path");
-// preload images --> loadimage - variable = loadImage("file-path");
-// use img --> image(variable, x, y, width, height);
 function preload() {
   screenBackground = loadImage("img/screenbackground.png");
   firstLevelBackground = loadImage("img/level-01.png");
@@ -27,8 +26,8 @@ let state = "start";
 let timer = 30;
 
 //Main character variables
-let chickenY = 560;
 let chickenX = 0;
+let chickenY = 560;
 let speed = 0;
 const chickenWidth = 40;
 const chickenHeight = 40;
@@ -43,7 +42,6 @@ let fallingSpeed = 1;
 let acceleration = 0.3;
 let jumpCounter = 0;
 
-// objects
 const arrowKey = {
   upArrow: 38,
   rightArrow: 39,
@@ -55,7 +53,6 @@ const arrowKey = {
 };
 
 const coordinates = {
-  //canvas xywh
   x: 0,
   y: 0,
   width: 1366,
@@ -71,9 +68,6 @@ class Coin {
     this.height = height;
   }
 }
-
-let coinArray1;
-let coinArray2;
 
 function drawCoins() {
   coinArray1 = [
@@ -101,25 +95,6 @@ function setup() {
   canvas.parent("canvas-holder");
   background(255, 255, 255);
   frameRate(30);
-
-  /*coinArray1 = [
-    new Coin(coinImage, 240, 200, 40, 40),
-    new Coin(coinImage, 1040, 240, 40, 40),
-    new Coin(coinImage, 1320, 360, 40, 40),
-    new Coin(coinImage, 920, 520, 40, 40),
-    new Coin(coinImage, 80, 360, 40, 40),
-    new Coin(coinImage, 600, 320, 40, 40),
-    new Coin(coinImage, 760, 600, 40, 40),
-    new Coin(coinImage, 280, 520, 40, 40),
-  ];
-
-  coinArray2 = [
-    new Coin(coinImage, 1080, 40, 40, 40),
-    new Coin(coinImage, 200, 560, 40, 40),
-    new Coin(coinImage, 920, 360, 40, 40),
-    new Coin(coinImage, 200, 200, 40, 40),
-    new Coin(coinImage, 600, 40, 40, 40),
-  ];*/
   drawCoins();
 }
 window.setup = setup;
@@ -212,6 +187,7 @@ function keyPressed() {
     }
   }
 }
+window.keyPressed = keyPressed;
 
 //Reset
 function keyReleased() {
@@ -222,6 +198,7 @@ function keyReleased() {
     jump = false;
   }
 }
+window.keyReleased = keyReleased;
 
 //https://chat.openai.com/share/28fefe10-0739-4420-8a4c-10edff61a6a8 - 28-04-2024
 //
@@ -292,9 +269,6 @@ function collectCoins(coinArray) {
   text(coinCounter, 88, 145);
 }
 
-window.keyPressed = keyPressed;
-window.keyReleased = keyReleased;
-
 function startScreen() {
   if (state === "start") {
     image(
@@ -310,13 +284,12 @@ function startScreen() {
 
     winLoss.draw();
     startLevelOneButton.draw();
-
     mapTiles();
   }
 }
 
 function numberInfo() {
-  // the following 2 lines of code was adapted from: https://editor.p5js.org/marynotari/sketches/S1T2ZTMp- - 2024-05-06
+  // the following 6 lines of code was adapted from: https://editor.p5js.org/marynotari/sketches/S1T2ZTMp- - 2024-05-06
   if (frameCount % 30 === 0 && timer > 0) {
     timer--;
   }
@@ -455,5 +428,4 @@ function draw() {
 
   coordinatePointer(); // makes the exact coordinates of the canvas visible with mouse
 }
-
 window.draw = draw;
