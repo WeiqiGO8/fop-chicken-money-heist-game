@@ -7,6 +7,8 @@ let firstLevelBackground;
 let secondLevelBackground;
 let coinImage;
 let mainCharacter;
+let coinArray1;
+let coinArray2;
 
 function preload() {
   screenBackground = loadImage("img/screenbackground.png");
