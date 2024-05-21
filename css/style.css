@@ -1,0 +1,42 @@
+:root {
+  background: #000000;
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  position: relative;
+  display: block;
+}
+
+#scoreboard {
+  display: inline;
+  background-color: #ffffff;
+  position: absolute;
+  left: 31.6em;
+  top: 11.3em;
+}
+
+input[type="text"] {
+  margin: 2em 0.5em;
+  padding: 1em 0.5em;
+}
+
+input[type="button"]#save-button {
+  margin: 2em 0.5em;
+  padding: 1em 0.5em;
+  cursor: pointer;
+}
+
+input[type="button"] {
+  margin: 2em 0.5em;
+  padding: 1em 0.5em;
+  cursor: pointer;
+}
+
+.p-style {
+  font-size: 1.2em;
+  font-style: italic;
+}

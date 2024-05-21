@@ -8,9 +8,6 @@ let secondLevelBackground;
 let coinImage;
 let mainCharacter;
 
-// load images - variable = loadImage("file-path");
-// preload images --> loadimage - variable = loadImage("file-path");
-// use img --> image(variable, x, y, width, height);
 function preload() {
   screenBackground = loadImage("img/screenbackground.png");
   firstLevelBackground = loadImage("img/level-01.png");
@@ -25,8 +22,8 @@ let state = "start";
 let timer = 30;
 
 //Main character variables
-let chickenY = 560;
 let chickenX = 0;
+let chickenY = 560;
 let speed = 0;
 const chickenWidth = 40;
 const chickenHeight = 40;
@@ -41,7 +38,6 @@ let fallingSpeed = 1;
 let acceleration = 0.3;
 let jumpCounter = 0;
 
-// objects
 const arrowKey = {
   upArrow: 38,
   rightArrow: 39,
@@ -53,7 +49,6 @@ const arrowKey = {
 };
 
 const coordinates = {
-  //canvas xywh
   x: 0,
   y: 0,
   width: 1366,
@@ -69,9 +64,6 @@ class Coin {
     this.height = height;
   }
 }
-
-let coinArray1;
-let coinArray2;
 
 function drawCoins() {
   coinArray1 = [
@@ -191,6 +183,7 @@ function keyPressed() {
     }
   }
 }
+window.keyPressed = keyPressed;
 
 //Reset
 function keyReleased() {
@@ -201,6 +194,7 @@ function keyReleased() {
     jump = false;
   }
 }
+window.keyReleased = keyReleased;
 
 // The gravity function was adapted from this chatgpt conversation. 
 // https://chatgpt.com/share/28fefe10-0739-4420-8a4c-10edff61a6a8 -21-05-2024
@@ -268,11 +262,8 @@ function collectCoins(coinArray) {
       }
     }
   }
-  text(coinCounter, 88, 145);
+  text(coinCounter, 88, 106);
 }
-
-window.keyPressed = keyPressed;
-window.keyReleased = keyReleased;
 
 function startScreen() {
   if (state === "start") {
@@ -289,13 +280,12 @@ function startScreen() {
 
     winLoss.draw();
     startLevelOneButton.draw();
-
     mapTiles();
   }
 }
 
 function numberInfo() {
-  // the following 2 lines of code was adapted from: https://editor.p5js.org/marynotari/sketches/S1T2ZTMp- - 2024-05-06
+  // the following 6 lines of code was adapted from: https://editor.p5js.org/marynotari/sketches/S1T2ZTMp- - 2024-05-06
   if (frameCount % 30 === 0 && timer > 0) {
     timer--;
   }
@@ -305,14 +295,11 @@ function numberInfo() {
   push();
   fill(0, 0, 0);
   text("time", 4, 65);
-  text("velocity", 4, 106);
-  text("coins", 4, 145);
+  text("coins", 4, 106);
 
   text(timer, 88, 65);
-  text(Math.floor(velocity), 88, 106);
-
   fill(0, 0, 0);
-  text(coinCounter, 88, 145);
+  text(coinCounter, 88, 106);
   pop();
 }
 
@@ -361,7 +348,6 @@ function mouseClicked() {
     chickenY = 560;
     state = "levelOne";
     drawCoins();
-    // reset character position
   } else if (levelTwoButton.hitTest(mouseX, mouseY) && state === "win") {
     timer = 30;
     coinCounter = 0;
@@ -369,7 +355,6 @@ function mouseClicked() {
     chickenY = 320;
     state = "levelTwo";
     drawCoins();
-    // reset character position
   }
 }
 window.mouseClicked = mouseClicked;
@@ -432,5 +417,4 @@ function draw() {
 
   coordinatePointer(); // makes the exact coordinates of the canvas visible with mouse
 }
-
 window.draw = draw;

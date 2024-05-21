@@ -2,16 +2,6 @@ function mapTiles() {
   const mapSize = 40;
   const mapLength = 40;
 
-  // const mapSize = 40;
-  // const mapLength = 60;
-
-  const tileEmpty = 0;
-  const tilePlatform = 1;
-  const tileGround = 2;
-  const tileObject = 3;
-  const tileMainCharacter = 4;
-  const tileOpponent = 5;
-
   stroke(0, 0, 0, 10);
 
   for (let y = 0; y < mapLength; y++) {
