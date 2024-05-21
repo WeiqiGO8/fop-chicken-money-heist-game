@@ -7,7 +7,6 @@ let firstLevelBackground;
 let secondLevelBackground;
 let coinImage;
 let mainCharacter;
-let enemyCharacter;
 
 // load images - variable = loadImage("file-path");
 // preload images --> loadimage - variable = loadImage("file-path");
@@ -17,7 +16,6 @@ function preload() {
   firstLevelBackground = loadImage("img/level-01.png");
   secondLevelBackground = loadImage("img/level-02.png");
   mainCharacter = loadImage("img/chickenpixel.png");
-  //enemyCharacter = loadImage("img/henPixel.png");
   coinImage = loadImage("img/coin.png");
 }
 window.preload = preload;
@@ -101,25 +99,6 @@ function setup() {
   canvas.parent("canvas-holder");
   background(255, 255, 255);
   frameRate(30);
-
-  /*coinArray1 = [
-    new Coin(coinImage, 240, 200, 40, 40),
-    new Coin(coinImage, 1040, 240, 40, 40),
-    new Coin(coinImage, 1320, 360, 40, 40),
-    new Coin(coinImage, 920, 520, 40, 40),
-    new Coin(coinImage, 80, 360, 40, 40),
-    new Coin(coinImage, 600, 320, 40, 40),
-    new Coin(coinImage, 760, 600, 40, 40),
-    new Coin(coinImage, 280, 520, 40, 40),
-  ];
-
-  coinArray2 = [
-    new Coin(coinImage, 1080, 40, 40, 40),
-    new Coin(coinImage, 200, 560, 40, 40),
-    new Coin(coinImage, 920, 360, 40, 40),
-    new Coin(coinImage, 200, 200, 40, 40),
-    new Coin(coinImage, 600, 40, 40, 40),
-  ];*/
   drawCoins();
 }
 window.setup = setup;
@@ -223,8 +202,8 @@ function keyReleased() {
   }
 }
 
-//https://chat.openai.com/share/28fefe10-0739-4420-8a4c-10edff61a6a8 - 28-04-2024
-//
+// The gravity function was adapted from this chatgpt conversation. 
+// https://chatgpt.com/share/28fefe10-0739-4420-8a4c-10edff61a6a8 -21-05-2024
 // Adjusting platform detection to only the top of the tile, not using the horizontal movement code.
 // https://chat.openai.com/share/c164b996-7fff-494f-bc73-7e127d1b5ae1 -16-05-2024
 
@@ -418,7 +397,6 @@ function levelOne() {
 }
 
 function levelTwo() {
-  maxJumps = 3;
   image(
     secondLevelBackground,
     coordinates.x,
@@ -426,7 +404,6 @@ function levelTwo() {
     coordinates.width,
     coordinates.height
   );
-  //image(enemyCharacter,x,y,w)
   chicken(chickenX, chickenY);
   movement();
   gravity(gridData2);
