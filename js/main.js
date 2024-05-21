@@ -9,14 +9,14 @@ let coinImage;
 let mainCharacter;
 let coinArray1;
 let coinArray2;
-// let enemyCharacter;
+let enemyCharacter;
 
 function preload() {
   screenBackground = loadImage("img/screenbackground.png");
   firstLevelBackground = loadImage("img/level-01.png");
   secondLevelBackground = loadImage("img/level-02.png");
   mainCharacter = loadImage("img/chickenpixel.png");
-  //enemyCharacter = loadImage("img/henPixel.png");
+  enemyCharacter = loadImage("img/henPixel.png");
   coinImage = loadImage("img/coin.png");
 }
 window.preload = preload;
@@ -266,7 +266,7 @@ function collectCoins(coinArray) {
       }
     }
   }
-  text(coinCounter, 88, 145);
+  text(coinCounter, 88, 106);
 }
 
 function startScreen() {
@@ -299,14 +299,11 @@ function numberInfo() {
   push();
   fill(0, 0, 0);
   text("time", 4, 65);
-  text("velocity", 4, 106);
-  text("coins", 4, 145);
+  text("coins", 4, 106);
 
   text(timer, 88, 65);
-  text(Math.floor(velocity), 88, 106);
-
   fill(0, 0, 0);
-  text(coinCounter, 88, 145);
+  text(coinCounter, 88, 106);
   pop();
 }
 
@@ -355,7 +352,6 @@ function mouseClicked() {
     chickenY = 560;
     state = "levelOne";
     drawCoins();
-    // reset character position
   } else if (levelTwoButton.hitTest(mouseX, mouseY) && state === "win") {
     timer = 30;
     coinCounter = 0;
@@ -363,7 +359,6 @@ function mouseClicked() {
     chickenY = 320;
     state = "levelTwo";
     drawCoins();
-    // reset character position
   }
 }
 window.mouseClicked = mouseClicked;
@@ -399,7 +394,6 @@ function levelTwo() {
     coordinates.width,
     coordinates.height
   );
-  //image(enemyCharacter,x,y,w)
   chicken(chickenX, chickenY);
   movement();
   gravity(gridData2);
