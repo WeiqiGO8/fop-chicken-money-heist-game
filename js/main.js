@@ -101,22 +101,6 @@ function chicken(chickenX, chickenY) {
   image(mainCharacter, chickenX, chickenY, chickenWidth, chickenHeight);
 }
 
-// function to make it easier to work with the game - make up for the loss of p5canvas pluggin
-// the following 24 lines of code was adapted from:
-// https://p5js.org/learn/interactivity.html - 2024-04-12
-// https://chat.openai.com/share/9c07c535-912e-48df-9b54-6b2999925ddb - 2024-04-12
-function coordinatePointer() {
-  // cursor(CROSS);
-  textSize(20);
-  textStyle(BOLD);
-
-  fill(0, 0, 0);
-  text("(" + mouseX + ", " + mouseY + ")", 5, 20);
-
-  line(mouseX, 0, mouseX, height);
-  line(0, mouseY, width, mouseY);
-}
-
 // The following function was adapted from:
 // https://stackoverflow.com/questions/35973441/how-to-horizontally-flip-an-image - 2024-05-13
 
@@ -198,7 +182,7 @@ function keyReleased() {
 }
 window.keyReleased = keyReleased;
 
-// The gravity function was adapted from this chatgpt conversation. 
+// The gravity function was adapted from this chatgpt conversation.
 // https://chatgpt.com/share/28fefe10-0739-4420-8a4c-10edff61a6a8 -21-05-2024
 // Adjusting platform detection to only the top of the tile, not using the horizontal movement code.
 // https://chat.openai.com/share/c164b996-7fff-494f-bc73-7e127d1b5ae1 -16-05-2024
@@ -416,7 +400,5 @@ function draw() {
   } else if (state === "win" || state === "loss") {
     resultScreen();
   }
-
-  coordinatePointer(); // makes the exact coordinates of the canvas visible with mouse
 }
 window.draw = draw;
