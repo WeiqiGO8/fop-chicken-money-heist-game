@@ -6,37 +6,6 @@
   padding: 0;
 }
 
-.container {
-  position: relative;
-  display: block;
-}
+/* #canvas-holder {
 
-#scoreboard {
-  display: inline;
-  background-color: #ffffff;
-  position: absolute;
-  left: 31.6em;
-  top: 11.3em;
-}
-
-input[type="text"] {
-  margin: 2em 0.5em;
-  padding: 1em 0.5em;
-}
-
-input[type="button"]#save-button {
-  margin: 2em 0.5em;
-  padding: 1em 0.5em;
-  cursor: pointer;
-}
-
-input[type="button"] {
-  margin: 2em 0.5em;
-  padding: 1em 0.5em;
-  cursor: pointer;
-}
-
-.p-style {
-  font-size: 1.2em;
-  font-style: italic;
-}
+} */
