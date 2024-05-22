@@ -237,11 +237,18 @@ function ground(gridData) {
   const gridX = Math.floor(chickenX / tileSize);
   const gridY = Math.floor((chickenY + chickenHeight) / tileSize);
 
-  //console.log('chickenX:', chickenX);
-  //console.log('chickenWidth:', chickenWidth);
-  console.log("gridX:", gridX);
-  //console.log('tileSize:', tileSize);
-  //console.log('speed:', speed);
+  console.log(
+    "chickenX:",
+    chickenX,
+    "chickenWidth:",
+    chickenWidth,
+    "gridX:",
+    gridX,
+    "tileSize:",
+    tileSize,
+    "speed:",
+    speed
+  );
 
   if (
     gridY < gridData.length &&
@@ -278,7 +285,6 @@ function collectCoins(coinArray) {
       }
     }
   }
-  text(coinCounter, 88, 106);
 }
 
 function startScreen() {
@@ -309,13 +315,14 @@ function numberInfo() {
     state = "loss";
   }
   push();
+  textSize(20);
   fill(0, 0, 0);
-  text("time", 4, 65);
-  text("coins", 4, 106);
+  text("Time:", 45, 105);
+  text("Coins:", 45, 145);
 
-  text(timer, 88, 65);
+  text(timer, 130, 105);
   fill(0, 0, 0);
-  text(coinCounter, 88, 106);
+  text(coinCounter, 135, 145);
   pop();
 }
 
