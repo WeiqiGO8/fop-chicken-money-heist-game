@@ -384,7 +384,7 @@ function levelOne() {
   );
   chicken(chickenX, chickenY);
   movement();
-  ground(gridData1);
+  //ground(gridData1);
   gravity(gridData1);
   mapTiles();
   for (let coin of coinArray1) {
@@ -417,7 +417,7 @@ function levelTwo() {
   if (coinCounter === 5) {
     state = "win";
   }
-  ground(gridData2);
+  //ground(gridData2);
 }
 
 function draw() {
