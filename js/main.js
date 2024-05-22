@@ -101,22 +101,6 @@ function chicken(chickenX, chickenY) {
   image(mainCharacter, chickenX, chickenY, chickenWidth, chickenHeight);
 }
 
-// function to make it easier to work with the game - make up for the loss of p5canvas pluggin
-// the following 24 lines of code was adapted from:
-// https://p5js.org/learn/interactivity.html - 2024-04-12
-// https://chat.openai.com/share/9c07c535-912e-48df-9b54-6b2999925ddb - 2024-04-12
-function coordinatePointer() {
-  // cursor(CROSS);
-  textSize(20);
-  textStyle(BOLD);
-
-  fill(0, 0, 0);
-  text("(" + mouseX + ", " + mouseY + ")", 5, 20);
-
-  line(mouseX, 0, mouseX, height);
-  line(0, mouseY, width, mouseY);
-}
-
 // The following function was adapted from:
 // https://stackoverflow.com/questions/35973441/how-to-horizontally-flip-an-image - 2024-05-13
 
@@ -448,7 +432,5 @@ function draw() {
   } else if (state === "win" || state === "loss") {
     resultScreen();
   }
-
-  coordinatePointer(); // makes the exact coordinates of the canvas visible with mouse
 }
 window.draw = draw;
