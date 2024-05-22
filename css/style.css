@@ -1,11 +1,8 @@
 :root {
   background: #000000;
-  color: #000000;
-  font-family: Arial, Helvetica, sans-serif;
-  margin: 0;
-  padding: 0;
 }
 
-/* #canvas-holder {
-
-} */
+#canvas-holder {
+  max-width: fit-content;
+  margin: auto;
+}
