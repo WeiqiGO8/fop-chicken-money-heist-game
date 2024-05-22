@@ -198,7 +198,7 @@ function keyReleased() {
 }
 window.keyReleased = keyReleased;
 
-// The gravity function was adapted from this chatgpt conversation. 
+// The gravity function was adapted from this chatgpt conversation.
 // https://chatgpt.com/share/28fefe10-0739-4420-8a4c-10edff61a6a8 -21-05-2024
 // Adjusting platform detection to only the top of the tile, not using the horizontal movement code.
 // https://chat.openai.com/share/c164b996-7fff-494f-bc73-7e127d1b5ae1 -16-05-2024
@@ -242,6 +242,36 @@ function gravity(gridData) {
   // Check if chicken is falling below the platform
   if (!onPlatform) {
     velocity += fallingSpeed;
+  }
+}
+
+// The ground function was adjusted by suggestion from chatgpt to separate the logic for collision between the left and the right side.
+// https://chatgpt.com/share/848773a4-be5d-45b7-8c2d-18d9d48d69c3 -22-05-2024
+
+function ground(gridData) {
+  const tileSize = 40;
+  const gridX = Math.floor(chickenX / tileSize);
+  const gridY = Math.floor((chickenY + chickenHeight) / tileSize);
+
+  //console.log('chickenX:', chickenX);
+  //console.log('chickenWidth:', chickenWidth);
+  console.log("gridX:", gridX);
+  //console.log('tileSize:', tileSize);
+  //console.log('speed:', speed);
+
+  if (
+    gridY < gridData.length &&
+    gridX < gridData[gridY].length &&
+    gridData[gridY][gridX] === 2
+  ) {
+    // Check for right collision
+    if (speed > 0 && chickenX + chickenWidth > gridX * tileSize) {
+      chickenX = gridX * tileSize - chickenWidth;
+      console.log("Right collision");
+    } else if (speed < 0 && chickenX < (gridX + 1) * tileSize) {
+      // Left collision
+      chickenX = (gridX + 1) * tileSize;
+    }
   }
 }
 
@@ -371,6 +401,7 @@ function levelOne() {
   );
   chicken(chickenX, chickenY);
   movement();
+  ground(gridData1);
   gravity(gridData1);
   mapTiles();
   for (let coin of coinArray1) {
@@ -403,6 +434,7 @@ function levelTwo() {
   if (coinCounter === 5) {
     state = "win";
   }
+  ground(gridData2);
 }
 
 function draw() {
