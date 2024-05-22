@@ -19,6 +19,15 @@ function preload() {
 }
 window.preload = preload;
 
+function setup() {
+  let canvas = createCanvas(1366, 768);
+  canvas.parent("canvas-holder");
+  background(255, 255, 255);
+  frameRate(30);
+  drawCoins();
+}
+window.setup = setup;
+
 //variables
 let state = "start";
 let timer = 30;
@@ -87,15 +96,6 @@ function drawCoins() {
     new Coin(coinImage, 600, 40, 40, 40),
   ];
 }
-
-function setup() {
-  let canvas = createCanvas(1366, 768);
-  canvas.parent("canvas-holder");
-  background(255, 255, 255);
-  frameRate(30);
-  drawCoins();
-}
-window.setup = setup;
 
 function chicken(chickenX, chickenY) {
   image(mainCharacter, chickenX, chickenY, chickenWidth, chickenHeight);
@@ -182,9 +182,9 @@ function keyReleased() {
 }
 window.keyReleased = keyReleased;
 
-// The gravity function was adapted from this chatgpt conversation.
+// The gravity function was adapted from this chatgpt conversation:
 // https://chatgpt.com/share/28fefe10-0739-4420-8a4c-10edff61a6a8 -21-05-2024
-// Adjusting platform detection to only the top of the tile, not using the horizontal movement code.
+// Adjusting platform detection to only the top of the tile, not using the horizontal movement code:
 // https://chat.openai.com/share/c164b996-7fff-494f-bc73-7e127d1b5ae1 -16-05-2024
 
 //Gravity & Jumping
@@ -233,33 +233,7 @@ function gravity(gridData) {
   }
 }
 
-// The ground function was adjusted by suggestion from chatgpt to separate the logic for collision between the left and the right side.
-// https://chatgpt.com/share/848773a4-be5d-45b7-8c2d-18d9d48d69c3 -22-05-2024
-
-/*function ground(gridData) {
-  const tileSize = 40;
-  const gridX = Math.floor(chickenX / tileSize);
-  const gridY = Math.floor((chickenY + chickenHeight) / tileSize);
-
-  console.log("chickenY:", chickenY);
-
-  if (
-    gridY < gridData.length &&
-    gridX < gridData[gridY].length &&
-    gridData[gridY][gridX] === 2
-  ) {
-    // Check for right collision
-    if (speed > 0 && chickenX + chickenWidth > gridX * tileSize) {
-      chickenX = gridX * tileSize - chickenWidth;
-      console.log("Right collision");
-    } else if (speed < 0 && chickenX < (gridX + 1) * tileSize) {
-      // Left collision
-      chickenX = (gridX + 1) * tileSize;
-    }
-  }
-}*/
-
-// Line 262 to 279 is adapted from the following scource.
+// Line 262 to 279 is adapted from the following source:
 //https://www.youtube.com/watch?v=_sIm4LCiR0c timestamp: 13:09, 20-05-2024
 
 let coinCounter = 0;
@@ -290,7 +264,7 @@ function startScreen() {
       coordinates.height
     );
 
-    let winLoss = new Button(480, 320, 400, 80, "Chicken Platform");
+    let winLoss = new Button(480, 320, 400, 80, "Chicken Money Heist");
     let startLevelOneButton = new Button(560, 440, 240, 40, "Level 1");
 
     winLoss.draw();
@@ -417,7 +391,6 @@ function levelTwo() {
   if (coinCounter === 5) {
     state = "win";
   }
-  //ground(gridData2);
 }
 
 function draw() {
