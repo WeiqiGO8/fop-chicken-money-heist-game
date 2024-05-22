@@ -227,28 +227,21 @@ function gravity(gridData) {
   if (!onPlatform) {
     velocity += fallingSpeed;
   }
+
+  if (chickenY >= 720) {
+    state = "loss";
+  }
 }
 
 // The ground function was adjusted by suggestion from chatgpt to separate the logic for collision between the left and the right side.
 // https://chatgpt.com/share/848773a4-be5d-45b7-8c2d-18d9d48d69c3 -22-05-2024
 
-function ground(gridData) {
+/*function ground(gridData) {
   const tileSize = 40;
   const gridX = Math.floor(chickenX / tileSize);
   const gridY = Math.floor((chickenY + chickenHeight) / tileSize);
 
-  console.log(
-    "chickenX:",
-    chickenX,
-    "chickenWidth:",
-    chickenWidth,
-    "gridX:",
-    gridX,
-    "tileSize:",
-    tileSize,
-    "speed:",
-    speed
-  );
+  console.log("chickenY:", chickenY);
 
   if (
     gridY < gridData.length &&
@@ -264,7 +257,7 @@ function ground(gridData) {
       chickenX = (gridX + 1) * tileSize;
     }
   }
-}
+}*/
 
 // Line 262 to 279 is adapted from the following scource.
 //https://www.youtube.com/watch?v=_sIm4LCiR0c timestamp: 13:09, 20-05-2024
@@ -319,7 +312,6 @@ function numberInfo() {
   fill(0, 0, 0);
   text("Time:", 45, 105);
   text("Coins:", 45, 145);
-
   text(timer, 130, 105);
   fill(0, 0, 0);
   text(coinCounter, 135, 145);
